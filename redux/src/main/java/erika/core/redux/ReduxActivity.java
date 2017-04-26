@@ -5,10 +5,11 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
 import erika.core.redux.utils.StateBinder;
 
-public abstract class ReduxActivity<AppState, State> extends Activity implements Component<AppState, State> {
+public abstract class ReduxActivity<AppState, State> extends AppCompatActivity implements Component<AppState, State> {
     private State state;
     private final StateBinder<AppState> binder = new StateBinder<>();
     private boolean isAlive;
