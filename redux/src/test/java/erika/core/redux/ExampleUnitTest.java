@@ -2,16 +2,35 @@ package erika.redux;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
+class X implements Cloneable {
+    ArrayList<Y> y;
+
+    @Override
+    public X clone() throws CloneNotSupportedException {
+        return (X) super.clone();
+    }
+}
+
+class Y implements Cloneable {
+    Z z;
+}
+
+class Z {
+    String me = "adsd";
+}
+
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+        X x = new X();
+        x.y = new ArrayList<>();
+        x.y.add(new Y());
+        x.y.get(0).z = new Z();
+        X clone = x.clone();
+        assertTrue(x.y == clone.y);
     }
 }

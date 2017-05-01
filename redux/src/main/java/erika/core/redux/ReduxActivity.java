@@ -77,4 +77,12 @@ public abstract class ReduxActivity<AppState, State> extends AppCompatActivity i
     public boolean isAlive() {
         return isAlive;
     }
+
+    public void dispatch(Action action) {
+        getStore().dispatch(action);
+    }
+
+    public void dispatch(DispatchAction action) {
+        getStore().dispatch(action);
+    }
 }

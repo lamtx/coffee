@@ -26,7 +26,7 @@ public class HomeReducer implements Reducer<HomeState> {
     }
 
     private static HomeState createHome(HomeState state, HomeActions.HomeSetTextAction action) {
-        return Redux.clone(state, x -> {
+        return Redux.copy(state, x -> {
             x.text = action.text;
         });
     }
