@@ -1,9 +1,13 @@
 package erika.core.communication;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class Reader {
     private String content;
@@ -61,10 +65,13 @@ public class Reader {
         return "1".equals(value);
     }
 
+    @NonNull
     public String readString() throws MissingFieldException {
-        return StringDecoder.decode(readNext());
+        String result = StringDecoder.decode(readNext());
+        return result == null ? "" : result;
     }
 
+    @Nullable
     public Date readDate() throws MissingFieldException {
         long milliseconds = readLong();
         if (milliseconds == Long.MIN_VALUE) {
@@ -73,6 +80,7 @@ public class Reader {
         return new Date(milliseconds);
     }
 
+    @Nullable
     public <T> T readObject(ObjectReader<T> reader) throws MissingFieldException {
         if (readBoolean()) {
             return reader.createFromReader(this);
@@ -80,6 +88,7 @@ public class Reader {
         return null;
     }
 
+    @Nullable
     public <T> T[] readArrayObject(ObjectReader<T> reader) throws MissingFieldException {
         boolean hasValue = readBoolean();
         if (hasValue) {
@@ -92,6 +101,7 @@ public class Reader {
         return null;
     }
 
+    @Nullable
     public String[] readStringArray() throws MissingFieldException {
         boolean hasValue = readBoolean();
         if (hasValue) {
@@ -104,7 +114,8 @@ public class Reader {
         return null;
     }
 
-    public <T> ArrayList<T> readArrayListObject(ObjectReader<T> reader) throws MissingFieldException {
+    @NonNull
+    public <T> List<T> readArrayListObject(ObjectReader<T> reader) throws MissingFieldException {
         boolean hasValue = readBoolean();
         if (hasValue) {
             int len = readInt();
@@ -114,6 +125,6 @@ public class Reader {
             }
             return array;
         }
-        return null;
+        return Collections.emptyList();
     }
 }

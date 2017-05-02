@@ -7,7 +7,6 @@ import erika.app.coffee.application.ActionType;
 import erika.app.coffee.model.LoadState;
 import erika.app.coffee.model.args.SetMenuCategoryKeywordArgs;
 import erika.app.coffee.model.args.SetMenuCategoryListArgs;
-import erika.app.coffee.state.MenuState;
 import erika.app.coffee.state.OrderState;
 import erika.core.redux.Action;
 import erika.core.redux.Reducer;
@@ -32,21 +31,20 @@ public class OrderReducer implements Reducer<OrderState> {
 
     private OrderState setMenuCategoryList(OrderState state, SetMenuCategoryListArgs action) {
         return Redux.copy(state, x -> {
-            MenuState menuState = x.menuStates.get(action.menuType.ordinal());
-            x.menuStates = x.menuStates.set(action.menuType.ordinal(), Redux.copy(menuState, menu -> {
+            x.menuState = Redux.copy(x.menuState, menu -> {
                 menu.refreshing = false;
                 menu.loadState = LoadState.NONE;
                 menu.items = action.categoryList;
-            }));
+                menu.noneFilteredItems = action.noneFilteredList;
+            });
         });
     }
 
     private OrderState setMenuCategoryKeyword(OrderState state, SetMenuCategoryKeywordArgs action) {
         return Redux.copy(state, x -> {
-            MenuState menuState = x.menuStates.get(action.menuType.ordinal());
-            x.menuStates = x.menuStates.set(action.menuType.ordinal(), Redux.copy(menuState, menu -> {
-                menu.keyword = action.keyword;
-            }));
+            x.menuState = Redux.copy(x.menuState, e -> {
+                e.keyword = action.keyword;
+            });
         });
     }
 }

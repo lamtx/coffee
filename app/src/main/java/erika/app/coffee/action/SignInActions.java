@@ -4,7 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import erika.app.coffee.application.Define;
-import erika.app.coffee.component.HomeFragment;
+import erika.app.coffee.component.TableListFragment;
 import erika.app.coffee.model.args.SetHostArgs;
 import erika.app.coffee.model.args.SetPasswordArgs;
 import erika.app.coffee.model.args.SetUserNameArgs;
@@ -38,12 +38,12 @@ public class SignInActions {
                 realHost = host;
                 port = Define.PORT;
             } else {
-                realHost = host.substring(0, index - 1);
+                realHost = host.substring(0, index);
                 String portAsString = host.substring(index + 1);
                 try {
                     port = Integer.parseInt(portAsString);
                 } catch (NumberFormatException ignored) {
-                    // TODO: Show error message
+                    dispatcher.dispatch(MessageBoxActions.show("Host bị sai", "Đăng nhập"));
                     return;
                 }
             }
@@ -52,9 +52,9 @@ public class SignInActions {
             serviceInterface.signIn(userName, password, realHost, port).then(task -> {
                 dispatcher.dispatch(LoadingDialogAction.dismiss());
                 if (task.getResult() == Client.SocketStatus.OK) {
-                    dispatcher.dispatch(MainActions.push(HomeFragment.class));
+                    dispatcher.dispatch(MainActions.push(TableListFragment.class));
                 } else {
-                    // TODO: Show error message
+                    dispatcher.dispatch(MessageBoxActions.show("Error: " + task.getResult(), "Đăng nhập"));
                 }
             });
         };

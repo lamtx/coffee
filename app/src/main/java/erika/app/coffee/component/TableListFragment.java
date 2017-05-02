@@ -1,8 +1,5 @@
 package erika.app.coffee.component;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +8,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import erika.app.coffee.R;
-import erika.app.coffee.action.HomeActions;
 import erika.app.coffee.action.MainActions;
 import erika.app.coffee.action.OrderActions;
 import erika.app.coffee.action.TableListActions;
@@ -24,26 +20,10 @@ import erika.app.coffee.state.TableListState;
 import erika.app.coffee.utility.Utils;
 
 public class TableListFragment extends BaseListFragment<TableListState, CheckableTable> {
-    private static final String BUNDLE_TABLE_STATUS = "table-status";
-    private TableStatus tableStatus = TableStatus.All;
-
-    public static TableListFragment newInstance(TableStatus tableStatus) {
-        Bundle args = new Bundle();
-        args.putInt(BUNDLE_TABLE_STATUS, tableStatus.ordinal());
-        TableListFragment fragment = new TableListFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_table;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        tableStatus = TableStatus.values()[getArguments().getInt(BUNDLE_TABLE_STATUS)];
     }
 
     @Override
@@ -53,45 +33,35 @@ public class TableListFragment extends BaseListFragment<TableListState, Checkabl
 
     @Override
     public TableListState getStateFromStore(AppState appState) {
-        return appState.home.pages.get(tableStatus.ordinal());
+        return appState.tableList;
     }
 
     @Override
     public void onStart() {
         super.onStart();
         if (getState().items.isEmpty()) {
-            dispatch(HomeActions.fetchTable(getActivity(), tableStatus, true, null));
+            dispatch(TableListActions.fetchTable(getActivity()));
         }
     }
 
     private class ItemHolder extends ViewBinder<CheckableTable> {
-        private final TextView textCustomerName;
         private final TextView textPrice;
         private final TextView textName;
-        private final boolean enableLongClick;
-        private final boolean isMultiSelection;
+        private final boolean enableMenu;
         private final View buttonMenu;
 
         ItemHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.item_table, parent, false));
-            this.enableLongClick = getState().enableLongClick;
-            this.isMultiSelection = getState().isMultiSelection;
+            this.enableMenu = getState().enableMenu;
 
             textName = (TextView) itemView.findViewById(R.id.textName);
             textPrice = (TextView) itemView.findViewById(R.id.textPrice);
-            textCustomerName = (TextView) itemView.findViewById(R.id.textCustomerName);
-            textCustomerName.setVisibility(getState().showCustomer ? View.VISIBLE : View.GONE);
             buttonMenu = itemView.findViewById(R.id.buttonMenu);
             itemView.setOnClickListener(v -> {
-                if (!isMultiSelection) {
-                    openTable(getItem().table);
-                } else {
-                    Checkable checkable = (Checkable) v;
-                    setTableChecked(getItem(), !checkable.isChecked());
-                }
+                openTable(getItem().table);
             });
 
-            if (isEnableLongClick()) {
+            if (enableMenu) {
                 buttonMenu.setOnClickListener(v -> {
                     showMenu(v, getItem().table);
                 });
@@ -104,15 +74,9 @@ public class TableListFragment extends BaseListFragment<TableListState, Checkabl
         public void bind() {
             CheckableTable item = getItem();
             textName.setText(item.table.name);
-            textCustomerName.setText(item.table.customer == null ? "" : item.table.customer.name);
             textPrice.setText(Utils.stringFrom(item.table.price));
             itemView.setBackgroundResource(getColor(item.table.status));
             ((Checkable) itemView).setChecked(item.checked);
-        }
-
-        private boolean isEnableLongClick() {
-            // True if status is pending-checkout or busy
-            return enableLongClick && TableStatus.TamtinhAndBusy.contains(tableStatus);
         }
     }
 
@@ -122,12 +86,6 @@ public class TableListFragment extends BaseListFragment<TableListState, Checkabl
                 return R.drawable.table_available;
             case Busy:
                 return R.drawable.table_busy;
-            case Hengio:
-                return R.drawable.table_busy;
-            case Tamtinh:
-                return R.drawable.table_pending_checkout;
-            case TamtinhAndBusy:
-                return R.drawable.table_pdobs;
             default:
                 return R.drawable.table_available;
         }
@@ -153,15 +111,9 @@ public class TableListFragment extends BaseListFragment<TableListState, Checkabl
         popup.show();
     }
 
-    private void setTableChecked(CheckableTable item, boolean checked) {
-        dispatch(TableListActions.setCheckableTableChecked(tableStatus, item, checked));
-    }
-
     private void openTable(Table table) {
         switch (table.status) {
             case Busy:
-            case Tamtinh:
-            case TamtinhAndBusy:
                 dispatch(OrderActions.setTable(table, true));
                 dispatch(MainActions.push(OrderFragment.class));
                 break;

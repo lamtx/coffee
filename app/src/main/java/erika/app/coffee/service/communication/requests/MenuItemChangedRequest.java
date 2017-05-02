@@ -6,22 +6,19 @@ public class MenuItemChangedRequest extends Request {
     public int tableId;
     public int menuItemId;
     public int quantity;
-    public String note;
     public int detailId;
 
     public MenuItemChangedRequest(int tableId, int menuItemId, int quantity,
-            int detailId, String note) {
+            int detailId) {
         this.menuItemId = menuItemId;
         this.tableId = tableId;
         this.detailId = detailId;
         this.quantity = quantity;
-        this.note = note;
     }
 
     @Override
     public void writeToWriter(Writer writer) {
         super.writeToWriter(writer);
-        writer.write(tableId).write(menuItemId).write(detailId).write(quantity)
-                .write(note);
+        writer.write(tableId).write(menuItemId).write(detailId).write(quantity);
     }
 }

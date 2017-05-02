@@ -5,9 +5,6 @@ public class ActionTable {
     }
 
     public static final int ThanhToan = 1;
-    public static final int TamTinh = 2;
-    public static final int ThanhToanVaIn = 3;
-    public static final int HuyPhucVu = 4;
-    public static final int TheKhachHang = 5;
-    public static final int PrintOrder = 6;
+    public static final int ThanhToanVaIn = 2;
+    public static final int HuyPhucVu = 0;
 }

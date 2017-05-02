@@ -143,6 +143,15 @@ public class ImmutableArrayList<E> implements Collection<E> {
         return new ImmutableStack<>(buffer);
     }
 
+    @CheckResult
+    public <NewType> ImmutableArrayList<E> map(Function<E, NewType> expression) {
+        Object[] buffer = new Object[items.length];
+        for (int i = 0; i < buffer.length; i++) {
+            buffer[i] = expression.apply((E)items[i]);
+        }
+        return new ImmutableArrayList<>(buffer);
+    }
+
     private static class ImmutableStackIterator<T> implements Iterator<T> {
         private final Object[] items;
         private int index = 0;

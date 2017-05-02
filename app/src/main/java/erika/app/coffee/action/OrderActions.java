@@ -2,7 +2,6 @@ package erika.app.coffee.action;
 
 import java.util.List;
 
-import erika.app.coffee.model.MenuType;
 import erika.app.coffee.model.args.SetMenuCategoryKeywordArgs;
 import erika.app.coffee.model.args.SetMenuCategoryListArgs;
 import erika.app.coffee.model.args.SetTableForOrderComponentArgs;
@@ -15,11 +14,11 @@ public class OrderActions {
         return new SetTableForOrderComponentArgs(table, shouldReload);
     }
 
-    public static Action setMenuCategoryList(MenuType menuType, List<MenuCategory> categories) {
-        return new SetMenuCategoryListArgs(menuType, categories);
+    public static Action setMenuCategoryList(List<MenuCategory> categories, List<MenuCategory> noneFilteredList) {
+        return new SetMenuCategoryListArgs(categories, noneFilteredList);
     }
 
-    public static Action setMenuCategoryKeyword(MenuType menuType, String keyword) {
-        return new SetMenuCategoryKeywordArgs(menuType, keyword);
+    public static Action setMenuCategoryKeyword(String keyword) {
+        return new SetMenuCategoryKeywordArgs(keyword);
     }
 }

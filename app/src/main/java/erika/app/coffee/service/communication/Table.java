@@ -10,32 +10,24 @@ public class Table {
     public final String name;
     public final TableStatus status;
     public final long price;
-    public final Customer customer;
 
-    public Table(String name, Customer customer) {
+    public Table(String name) {
         id = 0;
         this.name = name;
         this.status = TableStatus.Busy;
         price = 0;
-        this.customer = customer;
     }
 
     private Table(Reader reader) throws MissingFieldException {
-        status = TableStatus.fromBit(reader.readInt());
+        status = TableStatus.values()[reader.readInt()]; // TODO: Check safe cast int to enum
         id = reader.readInt();
         price = reader.readLong();
         name = reader.readString();
-        customer = reader.readObject(Customer.READER);
     }
 
     @Override
     public String toString() {
-        if (customer == null) {
-            return status + " " + id + " " + price + " " + name;
-        } else {
-            return status + " " + id + " " + price + " " + name + " "
-                    + customer.toString();
-        }
+        return status + " " + id + " " + price + " " + name;
     }
 
     public static final ObjectReader<Table> READER = new ObjectReader<Table>() {

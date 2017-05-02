@@ -7,39 +7,9 @@ import erika.core.communication.Reader;
 public class MenuItem {
     public int id;
     public String name;
-    public String code;
-    public long price;
     public int percent;
-    public int quantity;
-    public String englishName;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public long getPrice() {
-        return price;
-    }
-
-    public void setPrice(long price) {
-        this.price = price;
-    }
-
-    public int getPercent() {
-        return this.percent;
-    }
+    public long price;
+    public String unit;
 
     public MenuItem() {
     }
@@ -53,11 +23,9 @@ public class MenuItem {
     private MenuItem(Reader reader) throws MissingFieldException {
         id = reader.readInt();
         price = reader.readLong();
-        code = reader.readString();
-        englishName = reader.readString();
         percent = reader.readInt();
-        quantity = reader.readInt();
         name = reader.readString();
+        unit = reader.readString();
     }
 
     public static final ObjectReader<MenuItem> READER = new ObjectReader<MenuItem>() {
