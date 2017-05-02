@@ -1,4 +1,4 @@
-include ':redux'
+include ':redux', ':app'
 include ':async-redux'
 include ':communication'
 include ':net'

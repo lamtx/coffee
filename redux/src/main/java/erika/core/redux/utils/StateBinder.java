@@ -36,10 +36,10 @@ public class StateBinder<AppState> {
             State oldState = component.getState();
             State newState = component.getStateFromStore(state);
             if (newState != oldState) {
-                component.setState(newState);
                 if (component.isAlive()) {
                     component.bindStateToView(newState);
                 }
+                component.setState(newState);
             }
         }
     }

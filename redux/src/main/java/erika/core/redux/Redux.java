@@ -1,8 +1,6 @@
 package erika.core.redux;
 
-import android.annotation.TargetApi;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.support.annotation.CheckResult;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,6 +22,7 @@ public class Redux {
     private Redux() {
     }
 
+    @CheckResult
     public static <T extends Cloneable> T copy(T old) {
         T clone;
         try {
@@ -34,6 +33,7 @@ public class Redux {
         return clone;
     }
 
+    @CheckResult
     public static <T extends Cloneable> T copy(T old, ObjectModifier<T> modifier) {
         T clone;
         try {
@@ -45,6 +45,7 @@ public class Redux {
         return clone;
     }
 
+    @CheckResult
     public static <T> List<T> map(List<T> source, ObjectCopier<T> function) {
         if (source == null) {
             return null;

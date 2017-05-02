@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<erika.app.coffee.utility.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/half_item_spacing"
+    android:background="@drawable/button"
+    android:clickable="true"
+    android:padding="@dimen/item_padding">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textName"
+            style="@style/Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:textColor="@color/lightTextColor" />
+
+        <TextView
+            android:id="@+id/textCustomerName"
+            style="@style/Dim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:textColor="@color/lightSecondaryTextColor" />
+
+        <TextView
+            android:id="@+id/textPrice"
+            style="@style/Dim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:textColor="@color/lightDisabledTextColor" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:background="?selectableItemBackground"
+        android:id="@+id/buttonMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_vertical_three_dots" />
+
+</erika.app.coffee.utility.CheckableLinearLayout>

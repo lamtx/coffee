@@ -1,0 +1,54 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="windowColor">@color/windowColor</item>
+        <item name="secondaryWindowColor">@color/windowColor</item>
+        <item name="secondaryTextColor">@color/secondaryTextColor</item>
+        <item name="textColor">@color/textColor</item>
+        <item name="disabledTextColor">@color/disabledTextColor</item>
+    </style>
+
+    <style name="OuterPopup">
+        <item name="android:background">#30000000</item>
+        <item name="android:clickable">true</item>
+    </style>
+    <style name="Popup">
+        <item name="android:layout_marginTop">40dp</item>
+        <item name="android:layout_marginBottom">40dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:background">@drawable/rounded_rectangle</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+    <style name="Title">
+        <item name="android:textColor">?textColor</item>
+        <item name="android:textSize">@dimen/large_font_size</item>
+    </style>
+    <style name="Text">
+        <item name="android:textColor">?textColor</item>
+        <item name="android:textSize">@dimen/medium_font_size</item>
+    </style>
+
+    <style name="Dim">
+        <item name="android:textColor">?secondaryTextColor</item>
+        <item name="android:textSize">@dimen/medium_font_size</item>
+    </style>
+
+    <style name="Text.Small">
+        <item name="android:textSize">@dimen/small_font_size</item>
+    </style>
+
+    <style name="Dim.Small">
+        <item name="android:textSize">@dimen/small_font_size</item>
+    </style>
+
+    <style name="Text.Small.Dim">
+        <item name="android:textColor">?secondaryTextColor</item>
+    </style>
+</resources>

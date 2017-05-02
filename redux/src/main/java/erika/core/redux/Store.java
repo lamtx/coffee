@@ -27,6 +27,7 @@ public class Store<State> implements Dispatcher {
         }
     }
 
+    @Override
     public void dispatch(DispatchAction action) {
         action.onDispatch(this);
     }

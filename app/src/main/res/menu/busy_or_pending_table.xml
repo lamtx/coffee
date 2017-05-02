@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_switch_table"
+        android:orderInCategory="100"
+        android:title="Đổi bàn"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_switch_customer"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:title="Đổi khách hàng" />
+    <item
+        android:id="@+id/action_merge_table"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:title="Gộp bàn" />
+
+</menu>

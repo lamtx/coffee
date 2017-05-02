@@ -1,5 +1,6 @@
 package erika.core.redux.immutable;
 
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
 import java.util.Collection;
@@ -9,10 +10,13 @@ import java.util.Set;
 
 public abstract class ImmutableEnumSet<E extends Enum<E>> implements Set<E> {
 
+    @CheckResult
     public abstract ImmutableEnumSet<E> put(E value);
 
+    @CheckResult
     public abstract ImmutableEnumSet<E> remove(E value);
 
+    @CheckResult
     public abstract ImmutableEnumSet<E> set(E value, boolean contained);
 
     public static <E extends Enum<E>> ImmutableEnumSet<E> noneOf(Class<E> elementType) {
