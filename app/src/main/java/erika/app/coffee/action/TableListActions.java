@@ -5,7 +5,6 @@ import android.content.Context;
 import java.util.List;
 
 import erika.app.coffee.model.CheckableTable;
-import erika.app.coffee.model.TableStatus;
 import erika.app.coffee.model.args.SetCheckableTableCheckedArgs;
 import erika.app.coffee.model.args.SetTableListResultArgs;
 import erika.app.coffee.service.ServiceInterface;

@@ -6,7 +6,6 @@ import erika.app.coffee.application.AppState;
 import erika.app.coffee.application.AppStore;
 import erika.app.coffee.model.ResponseHandler;
 import erika.app.coffee.service.Client;
-import erika.app.coffee.service.ServiceInterface;
 import erika.app.coffee.service.communication.responses.Response;
 import erika.core.redux.ReduxApplication;
 import erika.core.redux.Store;
