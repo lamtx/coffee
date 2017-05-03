@@ -8,9 +8,10 @@ import java.util.Iterator;
 public class LinkedList<E> implements Collection<E> {
     private LinkedListNode<E> head = null;
     private LinkedListNode<E> rear = null;
+    private int size = 0;
     @Override
     public int size() {
-        throw new UnsupportedOperationException("size");
+        return size;
     }
 
     @Override
@@ -37,13 +38,22 @@ public class LinkedList<E> implements Collection<E> {
     @NonNull
     @Override
     public Object[] toArray() {
-        throw new UnsupportedOperationException("toArray");
+        Object[] a = new Object[size];
+        int i = 0;
+        for (LinkedListNode<E> tmp = head; tmp != null; tmp = tmp.next) {
+            a[i++] = tmp.value;
+        }
+        return a;
     }
 
     @NonNull
     @Override
     public <T> T[] toArray(@NonNull T[] a) {
-        throw new UnsupportedOperationException("toArray");
+        int i = 0;
+        for (LinkedListNode tmp = head; tmp != null; tmp = tmp.next) {
+            a[i++] = (T) tmp.value;
+        }
+        return a;
     }
 
     @Override
@@ -55,6 +65,7 @@ public class LinkedList<E> implements Collection<E> {
             rear.next = new LinkedListNode<>(rear, null, e);
             rear = rear.next;
         }
+        size += 1;
         return true;
     }
 
@@ -91,6 +102,7 @@ public class LinkedList<E> implements Collection<E> {
             node.prev.next = node.next;
             node.next.prev = node.prev;
         }
+        size -= 1;
     }
 
     @Override
@@ -121,6 +133,7 @@ public class LinkedList<E> implements Collection<E> {
     @Override
     public void clear() {
         head = null;
+        size = 0;
     }
 
     public LinkedListNode<E> getHead() {

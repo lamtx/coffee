@@ -1,5 +1,6 @@
 package erika.core.redux;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.support.annotation.CallSuper;
@@ -64,11 +65,16 @@ public abstract class ReduxFragment<AppState, State> extends Fragment implements
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        ReduxApplication<AppState> app = (ReduxApplication<AppState>) context.getApplicationContext();
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ReduxApplication<AppState> app = (ReduxApplication<AppState>) activity.getApplicationContext();
         AppState appState = app.getStore().getState();
         setState(getStateFromStore(appState));
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
 
     @Override
