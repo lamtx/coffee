@@ -4,15 +4,15 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 
 import erika.app.coffee.action.MainActions;
 import erika.app.coffee.action.PopupActions;
 import erika.app.coffee.application.AppState;
 import erika.app.coffee.application.BaseActivity;
+import erika.app.coffee.state.MainState;
 import erika.app.coffee.utility.LayoutInflaterWrapper;
 
-public class MainActivity extends BaseActivity<AppState> {
+public class MainActivity extends BaseActivity<MainState> {
     private final LayoutInflaterWrapper layoutInflater = new LayoutInflaterWrapper(this);
 
     @Override
@@ -22,19 +22,19 @@ public class MainActivity extends BaseActivity<AppState> {
     }
 
     @Override
-    public AppState getStateFromStore(AppState appState) {
-        return appState;
+    public MainState getStateFromStore(AppState appState) {
+        return appState.main;
     }
 
     @Override
     public void onBackPressed() {
-        if (getState().popup.popupContainer != null) {
-            if (getState().popup.cancellable) {
+        if (getState().popupContainer != null) {
+            if (getState().cancellable) {
                 dispatch(PopupActions.dismiss());
             }
             return;
         }
-        if (getState().main.backStack.size() > 1) {
+        if (getState().backStack.size() > 1) {
             dispatch(MainActions.pop());
             return;
         }
@@ -50,19 +50,15 @@ public class MainActivity extends BaseActivity<AppState> {
 //    }
 
     @Override
-    public void bindStateToView(AppState appState) {
-        super.bindStateToView(appState);
-       // if (getState() == null || getState().main != appState.main) {
-            Class<? extends Fragment> clazz = appState.main.backStack.peek();
-            if (clazz != null) {
-                bindComponentToId(clazz, R.id.container);
-            } else {
-                throw new IllegalStateException("Nothing in back stack");
-            }
-       // }
-      //  if (getState() == null || getState().popup != appState.popup) {
-            bindComponentToId(appState.popup.popupContainer, R.id.popup);
-      //  }
+    public void bindStateToView(MainState state) {
+        super.bindStateToView(state);
+        Class<? extends Fragment> clazz = state.backStack.peek();
+        if (clazz != null) {
+            bindComponentToId(clazz, R.id.container);
+        } else {
+            throw new IllegalStateException("Nothing in back stack");
+        }
+        bindComponentToId(state.popupContainer, R.id.popup);
     }
 
     private void bindComponentToId(Class<? extends Fragment> component, @IdRes int id) {

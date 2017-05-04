@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import erika.app.coffee.application.ActionType;
 import erika.app.coffee.model.args.PushComponentArgs;
+import erika.app.coffee.model.args.ShowPopupArgs;
 import erika.app.coffee.state.MainState;
 import erika.core.redux.Action;
 import erika.core.redux.Reducer;
@@ -22,6 +23,10 @@ public class MainReducer implements Reducer<MainState> {
                 return push(state, (PushComponentArgs) action);
             case ActionType.POP:
                 return pop(state);
+            case ActionType.SHOW_POPUP:
+                return showPopup(state, (ShowPopupArgs) action);
+            case ActionType.DISMISS_POPUP:
+                return dismissPopup(state);
             default:
                 return state;
         }
@@ -36,6 +41,18 @@ public class MainReducer implements Reducer<MainState> {
     private MainState pop(MainState state) {
         return Redux.copy(state, x -> {
             x.backStack = state.backStack.pop();
+        });
+    }
+
+    private MainState showPopup(MainState state, ShowPopupArgs args) {
+        return Redux.copy(state, x -> {
+            x.popupContainer = args.popupContainer;
+        });
+    }
+
+    private MainState dismissPopup(MainState state) {
+        return Redux.copy(state, x -> {
+            x.popupContainer = null;
         });
     }
 }

@@ -1,26 +1,13 @@
 package erika.core.redux;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-
-import erika.core.redux.utils.StateBinder;
 
 public abstract class ReduxActivity<AppState, State> extends AppCompatActivity implements Component<AppState, State> {
     private State state;
-    private final StateBinder<AppState> binder = new StateBinder<>();
-    private boolean isAlive;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setState(getStateFromStore(getStore().getState()));
-    }
-
-    public Store<AppState> getStore() {
+    private Store<AppState> getStore() {
+        @SuppressWarnings({"unchecked"})
         ReduxApplication<AppState> application = (ReduxApplication<AppState>) getApplication();
         return application.getStore();
 
@@ -31,51 +18,45 @@ public abstract class ReduxActivity<AppState, State> extends AppCompatActivity i
         return state;
     }
 
-    @Override
-    public void setState(State state) {
+    private void setState(State state) {
         this.state = state;
     }
 
     @Override
     @CallSuper
     public void bindStateToView(State state) {
-        binder.rebindState(getStore().getState());
     }
 
     @Override
     public abstract State getStateFromStore(AppState state);
 
+    @CallSuper
     @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        if (fragment instanceof Component) {
-            binder.onComponentAdded((Component<AppState, ?>) fragment);
-        }
-    }
+    public void willReceiveState(State state) {
 
-    public void onDetachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        if (fragment instanceof Component) {
-            binder.onComponentRemoved((Component<AppState, ?>) fragment);
-        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        isAlive = true;
-        bindStateToView(getState());
+        getStore().registerStateChangedListener(onStateChangedListener);
+        rebindState(getStore().getState());
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        isAlive = false;
+        getStore().unregisterStateChangedListener(onStateChangedListener);
     }
 
-    @Override
-    public boolean isAlive() {
-        return isAlive;
+    private void rebindState(AppState newAppState) {
+        State oldState = getState();
+        State newState = getStateFromStore(newAppState);
+        if (newState != oldState) {
+            willReceiveState(newState);
+            setState(newState);
+            bindStateToView(newState);
+        }
     }
 
     public void dispatch(Action action) {
@@ -85,4 +66,12 @@ public abstract class ReduxActivity<AppState, State> extends AppCompatActivity i
     public void dispatch(DispatchAction action) {
         getStore().dispatch(action);
     }
+
+    private final Store.OnStateChangedListener<AppState> onStateChangedListener = new Store.OnStateChangedListener<AppState>() {
+        @Override
+        public void onStateChanged(AppState oldAppState, AppState newAppState) {
+            rebindState(newAppState);
+        }
+    };
+
 }

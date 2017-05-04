@@ -1,5 +1,6 @@
 package erika.core.redux;
 
+import android.support.annotation.MainThread;
 
 import erika.core.redux.utils.LinkedList;
 import erika.core.redux.utils.LinkedListNode;
@@ -19,6 +20,7 @@ public class Store<State> implements Dispatcher {
     }
 
     @Override
+    @MainThread
     public void dispatch(Action action) {
         State oldState = this.state;
         this.state = reducer.reduce(this.state, action);
@@ -28,6 +30,7 @@ public class Store<State> implements Dispatcher {
     }
 
     @Override
+    @MainThread
     public void dispatch(DispatchAction action) {
         action.onDispatch(this);
     }
@@ -42,11 +45,13 @@ public class Store<State> implements Dispatcher {
         return state;
     }
 
-    void registerStateChangedListener(OnStateChangedListener<State> listener) {
+    @MainThread
+    public void registerStateChangedListener(OnStateChangedListener<State> listener) {
         listeners.add(listener);
     }
 
-    void unregisterStateChangedListener(OnStateChangedListener<State> listener) {
+    @MainThread
+    public void unregisterStateChangedListener(OnStateChangedListener<State> listener) {
         for (LinkedListNode<OnStateChangedListener<State>> node = listeners.getHead(); node != null; node = node.getNext()) {
             OnStateChangedListener<State> value = node.getValue();
             if (value == listener) {

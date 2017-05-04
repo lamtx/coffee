@@ -29,7 +29,7 @@ public class HomeActivity extends BaseActivity<HomeState> {
         ((EditText) findViewById(R.id.textSource)).addTextChangedListener(new DefaultTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                getStore().dispatch(new HomeActions.HomeSetTextAction(s.toString()));
+                dispatch(new HomeActions.HomeSetTextAction(s.toString()));
             }
         });
     }

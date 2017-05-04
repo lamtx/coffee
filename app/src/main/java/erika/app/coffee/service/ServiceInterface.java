@@ -28,12 +28,13 @@ public class ServiceInterface {
     }
 
     public Task<Client.SocketStatus> signIn(String userName, String password, String host, int port) {
-        ClientInfo clientInfo = new ClientInfo();
-        clientInfo.host = host;
-        clientInfo.userName = userName;
-        clientInfo.password = password;
-        clientInfo.port = port;
-        return client.connect(clientInfo);
+//        ClientInfo clientInfo = new ClientInfo();
+//        clientInfo.host = host;
+//        clientInfo.userName = userName;
+//        clientInfo.password = password;
+//        clientInfo.port = port;
+//        return client.connect(clientInfo);
+        return delayedCompleted(Client.SocketStatus.OK);
     }
 
     private static <T> Task<T> delayedCompleted(T value) {

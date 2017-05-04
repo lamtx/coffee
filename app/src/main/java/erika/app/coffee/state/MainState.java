@@ -7,4 +7,6 @@ import erika.core.redux.immutable.ImmutableStack;
 
 public class MainState implements Cloneable {
     public ImmutableStack<Class<? extends Fragment>> backStack = new ImmutableStack<>(SignInFragment.class);
+    public Class<? extends Fragment> popupContainer = null;
+    public boolean cancellable = true;
 }
