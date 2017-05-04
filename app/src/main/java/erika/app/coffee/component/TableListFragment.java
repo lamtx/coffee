@@ -13,6 +13,7 @@ import erika.app.coffee.action.OrderActions;
 import erika.app.coffee.action.TableListActions;
 import erika.app.coffee.application.AppState;
 import erika.app.coffee.model.CheckableTable;
+import erika.app.coffee.model.LoadState;
 import erika.app.coffee.model.TableStatus;
 import erika.app.coffee.presentation.ViewBinder;
 import erika.app.coffee.service.communication.Table;
@@ -40,6 +41,19 @@ public class TableListFragment extends BaseListFragment<TableListState, Checkabl
     public void onStart() {
         super.onStart();
         if (getState().items.isEmpty()) {
+            refresh();
+        }
+    }
+
+    @Override
+    protected void onRefreshRequested() {
+        super.onRefreshRequested();
+        refresh();
+    }
+
+    protected void refresh() {
+        dispatch(TableListActions.setIsRefreshing(true));
+        if (getState().loadState != LoadState.LOADING) {
             dispatch(TableListActions.fetchTable(getActivity()));
         }
     }
@@ -82,9 +96,9 @@ public class TableListFragment extends BaseListFragment<TableListState, Checkabl
 
     private static int getColor(TableStatus status) {
         switch (status) {
-            case Available:
+            case AVAILABLE:
                 return R.drawable.table_available;
-            case Busy:
+            case BUSY:
                 return R.drawable.table_busy;
             default:
                 return R.drawable.table_available;
@@ -113,11 +127,11 @@ public class TableListFragment extends BaseListFragment<TableListState, Checkabl
 
     private void openTable(Table table) {
         switch (table.status) {
-            case Busy:
+            case BUSY:
                 dispatch(OrderActions.setTable(table, true));
                 dispatch(MainActions.push(OrderFragment.class));
                 break;
-            case Available:
+            case AVAILABLE:
 //                Intent i = new Intent(getActivity(), SelectCustomerActivity.class);
 //                i.putExtras(SelectCustomerActivity.newArgs(table));
 //                startActivityForResult(i, REQUEST_BOOKING);

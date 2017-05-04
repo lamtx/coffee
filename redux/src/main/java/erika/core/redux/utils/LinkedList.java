@@ -91,13 +91,14 @@ public class LinkedList<E> implements Collection<E> {
     }
 
     public void remove(LinkedListNode<E> node) {
-        if (node.prev == null || node.next == null) {
-            if (node.prev == null) {
-                head = node.next;
-            }
-            if (node.next == null) {
-                rear = node.prev;
-            }
+        if (node.prev == null && node.next == null) {
+            rear = head = null;
+        } else if (node.prev == null) {
+            head = node.next;
+            head.prev = null;
+        } else if (node.next == null) {
+            rear = node.prev;
+            rear.next = null;
         } else {
             node.prev.next = node.next;
             node.next.prev = node.prev;

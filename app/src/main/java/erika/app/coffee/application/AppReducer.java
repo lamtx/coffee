@@ -3,6 +3,7 @@ package erika.app.coffee.application;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import erika.app.coffee.reducer.OrderedListReducer;
 import erika.app.coffee.reducer.TableListReducer;
 import erika.app.coffee.reducer.LoadingDialogReducer;
 import erika.app.coffee.reducer.MainReducer;
@@ -19,6 +20,7 @@ public class AppReducer implements Reducer<AppState> {
     private final TableListReducer tableList = new TableListReducer();
     private final MessageBoxReducer messageBox = new MessageBoxReducer();
     private final OrderReducer order = new OrderReducer();
+    private final OrderedListReducer orderedList = new OrderedListReducer();
 
     @NonNull
     @Override
@@ -34,6 +36,7 @@ public class AppReducer implements Reducer<AppState> {
         appState.tableList = tableList.reduce(state.tableList, action);
         appState.messageBox = messageBox.reduce(state.messageBox, action);
         appState.order = order.reduce(state.order, action);
+        appState.orderedList = orderedList.reduce(state.orderedList, action);
 
         return appState;
     }

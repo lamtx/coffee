@@ -26,18 +26,12 @@ import erika.core.threading.TaskCompletionSource;
 
 public class Client {
 
-    public enum SocketStatus {
-        CannotConnect("Không kết nối được thiết bị"),
-        ConnectionTimeout("Kết nối hết thời gian"),
-        InvalidAuthentication("Tài khoản hoặc mật khẩu không khớp"),
-        ParseError("Không đọc được dữ liệu từ thiết bị"),
-        OK("Đăng nhập thành công");
-
-        public final String description;
-
-        SocketStatus(String description) {
-            this.description = description;
-        }
+    public enum ConnectResult {
+        CANNOT_CONNECT,
+        CONNECTION_TIMEOUT,
+        INVALID_AUTHENTICATION,
+        PARSE_ERROR,
+        OK,
     }
 
     @IntDef({
@@ -141,15 +135,15 @@ public class Client {
         this.responseHandler = handler;
     }
 
-    public Task<SocketStatus> connect(ClientInfo clientInfo) {
+    public Task<ConnectResult> connect(ClientInfo clientInfo) {
         disconnect();
         currentClient = clientInfo;
-        TaskCompletionSource<SocketStatus> source = new TaskCompletionSource<>();
+        TaskCompletionSource<ConnectResult> source = new TaskCompletionSource<>();
         new Thread(() -> {
             status = ConnectionStatus.CONNECTING;
-            final SocketStatus completedStatus = establishConnection(clientInfo);
+            final ConnectResult completedStatus = establishConnection(clientInfo);
             source.setResult(completedStatus);
-            if (completedStatus == SocketStatus.OK) {
+            if (completedStatus == ConnectResult.OK) {
                 Client.this.status = ConnectionStatus.CONNECTED;
                 listen();
             } else {
@@ -159,13 +153,13 @@ public class Client {
         return source.getTask();
     }
 
-    private SocketStatus establishConnection(ClientInfo client) {
+    private ConnectResult establishConnection(ClientInfo client) {
         try {
             socket = new Socket();
             InetSocketAddress sockAddress = new InetSocketAddress(client.host, client.port);
             socket.connect(sockAddress, Define.CONNECTION_TIMEOUT);
         } catch (Exception e) {
-            return SocketStatus.CannotConnect;
+            return ConnectResult.CANNOT_CONNECT;
         }
         try {
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
@@ -175,28 +169,28 @@ public class Client {
             writer.flush();
         } catch (Exception e) {
             disconnect();
-            return SocketStatus.CannotConnect;
+            return ConnectResult.CANNOT_CONNECT;
         }
         String line;
         try {
             line = reader.readLine();
         } catch (IOException e1) {
-            return SocketStatus.CannotConnect;
+            return ConnectResult.CANNOT_CONNECT;
         }
         if (!TextUtils.isEmpty(line)) {
             int code;
             try {
                 code = Integer.parseInt(line);
             } catch (NumberFormatException e) {
-                return SocketStatus.ParseError;
+                return ConnectResult.PARSE_ERROR;
             }
             if (code >= 0) {
                 privilegeMask = code;
             }
 
-            return code < 0 ? SocketStatus.InvalidAuthentication : SocketStatus.OK;
+            return code < 0 ? ConnectResult.INVALID_AUTHENTICATION : ConnectResult.OK;
         } else {
-            return SocketStatus.ParseError;
+            return ConnectResult.PARSE_ERROR;
         }
     }
 
@@ -316,7 +310,7 @@ public class Client {
     private <T extends Response> void reconnect(ClientInfo clientInfo, Request request, @Nullable CheckedTaskCompletionSource<T> taskSource) {
         responseHandler.statusChanged(ConnectionStatus.DISCONNECTED, ConnectionStatus.CONNECTING);
         connect(clientInfo).then(task -> {
-            if (task.getResult() == SocketStatus.OK) {
+            if (task.getResult() == ConnectResult.OK) {
                 responseHandler.statusChanged(ConnectionStatus.CONNECTING, ConnectionStatus.CONNECTING);
                 trySendRequest(request, taskSource);
             } else {

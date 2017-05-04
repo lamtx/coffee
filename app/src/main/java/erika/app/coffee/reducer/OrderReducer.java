@@ -3,8 +3,10 @@ package erika.app.coffee.reducer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import erika.app.coffee.action.MenuItemActions;
 import erika.app.coffee.application.ActionType;
 import erika.app.coffee.model.LoadState;
+import erika.app.coffee.model.args.SetIsRefreshingArgs;
 import erika.app.coffee.model.args.SetMenuCategoryKeywordArgs;
 import erika.app.coffee.model.args.SetMenuCategoryListArgs;
 import erika.app.coffee.state.OrderState;
@@ -24,6 +26,8 @@ public class OrderReducer implements Reducer<OrderState> {
                 return setMenuCategoryList(state, (SetMenuCategoryListArgs) action);
             case ActionType.SET_MENU_CATEGORY_KEYWORD:
                 return setMenuCategoryKeyword(state, (SetMenuCategoryKeywordArgs) action);
+            case ActionType.SET_IS_REFRESHING:
+                return setIsRefreshing(state, (SetIsRefreshingArgs) action);
             default:
                 return state;
         }
@@ -47,4 +51,16 @@ public class OrderReducer implements Reducer<OrderState> {
             });
         });
     }
+
+    private OrderState setIsRefreshing(OrderState state, SetIsRefreshingArgs action) {
+        if (action.callingAction == MenuItemActions.class) {
+            return Redux.copy(state, x -> {
+                x.menuState = Redux.copy(x.menuState, e -> {
+                    e.refreshing = action.refreshing;
+                });
+            });
+        }
+        return state;
+    }
+
 }

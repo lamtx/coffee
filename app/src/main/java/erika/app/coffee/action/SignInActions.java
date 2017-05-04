@@ -51,7 +51,7 @@ public class SignInActions {
             dispatcher.dispatch(LoadingDialogAction.show("Sign in..."));
             serviceInterface.signIn(userName, password, realHost, port).then(task -> {
                 dispatcher.dispatch(LoadingDialogAction.dismiss());
-                if (task.getResult() == Client.SocketStatus.OK) {
+                if (task.getResult() == Client.ConnectResult.OK) {
                     dispatcher.dispatch(MainActions.push(TableListFragment.class));
                 } else {
                     dispatcher.dispatch(MessageBoxActions.show("Error: " + task.getResult(), "Đăng nhập"));

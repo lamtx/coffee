@@ -11,11 +11,11 @@ public class Table {
     public final TableStatus status;
     public final long price;
 
-    public Table(String name) {
-        id = 0;
+    public Table(int id, String name, TableStatus status, long price) {
+        this.id = id;
         this.name = name;
-        this.status = TableStatus.Busy;
-        price = 0;
+        this.status = status;
+        this.price = price;
     }
 
     private Table(Reader reader) throws MissingFieldException {

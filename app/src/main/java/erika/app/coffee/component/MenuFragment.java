@@ -80,14 +80,18 @@ public class MenuFragment extends BaseFragment<MenuState> {
     @Override
     public void onStart() {
         super.onStart();
-        refresh();
+        if (getState().items.isEmpty()) {
+            refresh();
+        }
     }
 
     private void refresh() {
-        if (getState().items.isEmpty()) {
+        dispatch(MenuItemActions.setIsRefreshing(true));
+        if (getState().loadState != LoadState.LOADING) {
             dispatch(MenuItemActions.fetchMenuItems(getActivity(), getState().keyword));
         }
     }
+
 
     private void searchMenu(String keyword) {
         dispatch(OrderActions.setMenuCategoryKeyword(keyword));

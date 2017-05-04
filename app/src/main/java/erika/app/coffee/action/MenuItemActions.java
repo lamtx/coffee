@@ -7,18 +7,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import erika.app.coffee.model.args.SetIsRefreshingArgs;
 import erika.app.coffee.service.ServiceInterface;
 import erika.app.coffee.service.communication.MenuCategory;
 import erika.app.coffee.service.communication.MenuItem;
 import erika.core.Vietnamese;
+import erika.core.redux.Action;
 import erika.core.redux.DispatchAction;
 
 public class MenuItemActions {
 
     public static DispatchAction fetchMenuItems(Context context, String keyword) {
-        return dispatcher -> ServiceInterface.shared(context).fetchMenuItems().then(task -> {
-            dispatcher.dispatch(OrderActions.setMenuCategoryList(filter(task.getResult().categories, keyword), task.getResult().categories));
-        });
+        return dispatcher -> {
+            dispatcher.dispatch(setIsRefreshing(true));
+            ServiceInterface.shared(context).fetchMenuItems().then(task -> {
+                dispatcher.dispatch(setIsRefreshing(false));
+                dispatcher.dispatch(OrderActions.setMenuCategoryList(filter(task.getResult().categories, keyword), task.getResult().categories));
+            });
+        };
     }
 
     public static DispatchAction search(List<MenuCategory> source, String keyword) {
@@ -48,5 +54,9 @@ public class MenuItemActions {
             }
             return result;
         }
+    }
+
+    public static Action setIsRefreshing(boolean refreshing) {
+        return new SetIsRefreshingArgs(MenuItemActions.class, refreshing);
     }
 }

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import erika.app.coffee.R;
 import erika.app.coffee.application.BaseFragment;
+import erika.app.coffee.model.LoadState;
 import erika.app.coffee.presentation.DataSource;
 import erika.app.coffee.presentation.ViewBinder;
 import erika.app.coffee.state.BaseListState;
@@ -28,19 +29,13 @@ public abstract class BaseListFragment<State extends BaseListState<E>, E> extend
         RecyclerView listView = (RecyclerView) view.findViewById(android.R.id.list);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresher);
         if (refreshLayout != null) {
-            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    onRefreshRequested();
-                }
-            });
+            refreshLayout.setOnRefreshListener(this::onRefreshRequested);
         }
         listView.setAdapter(dataSource);
         return view;
     }
 
     protected void onRefreshRequested() {
-
     }
 
     protected int getViewType(E e) {
@@ -54,7 +49,7 @@ public abstract class BaseListFragment<State extends BaseListState<E>, E> extend
         super.bindStateToView(state);
         dataSource.setItems(state.items);
         if (refreshLayout != null) {
-            refreshLayout.setRefreshing(state.refreshing);
+            refreshLayout.setRefreshing(state.refreshing || state.loadState == LoadState.LOADING);
         }
     }
 
