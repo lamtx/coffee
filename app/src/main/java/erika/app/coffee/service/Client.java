@@ -87,7 +87,7 @@ public class Client {
     }
 
     private static class CheckedTaskCompletionSource<T extends Response> implements UncheckedTaskCompletionSource {
-        final TaskCompletionSource<T> taskCompletionSource = new TaskCompletionSource<T>();
+        final TaskCompletionSource<T> taskCompletionSource = new TaskCompletionSource<>();
         final Class<T> expectedClass;
 
         CheckedTaskCompletionSource(Class<T> expectedClass) {

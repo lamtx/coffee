@@ -1,6 +1,5 @@
 package erika.app.coffee.service.communication;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import erika.core.communication.MissingFieldException;

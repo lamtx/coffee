@@ -4,14 +4,16 @@ import android.content.Context;
 
 import java.util.List;
 
-import erika.app.coffee.model.CheckableTable;
+import erika.app.coffee.R;
+import erika.app.coffee.component.MessageBox;
+import erika.app.coffee.component.OrderFragment;
 import erika.app.coffee.model.LoadState;
-import erika.app.coffee.model.args.SetCheckableTableCheckedArgs;
 import erika.app.coffee.model.args.SetIsRefreshingArgs;
 import erika.app.coffee.model.args.SetLoadStateArgs;
 import erika.app.coffee.model.args.SetTableListResultArgs;
+import erika.app.coffee.reducer.TableListReducer;
 import erika.app.coffee.service.ServiceInterface;
-import erika.core.Arrays;
+import erika.app.coffee.service.communication.Table;
 import erika.core.redux.Action;
 import erika.core.redux.DispatchAction;
 
@@ -23,8 +25,7 @@ public class TableListActions {
                 dispatcher.dispatch(setIsRefreshing(false));
                 if (task.isCompleted()) {
                     dispatcher.dispatch(setLoadState(LoadState.NONE));
-                    List<CheckableTable> result = Arrays.map(task.getResult().tables, x -> new CheckableTable(x, false));
-                    dispatcher.dispatch(setTableListResult(result));
+                    dispatcher.dispatch(setTableListResult(task.getResult().tables));
                 } else {
                     dispatcher.dispatch(setLoadState(LoadState.FAILED));
                 }
@@ -32,12 +33,36 @@ public class TableListActions {
         };
     }
 
-    private static Action setTableListResult(List<CheckableTable> items) {
-        return new SetTableListResultArgs(items);
+    public static DispatchAction serveTable(Context context, Table table) {
+        return dispatcher -> {
+            DispatchAction action = new MessageBoxActions.Builder()
+                    .message("Bạn có muốn phục vụ bàn " + table.name + "?")
+                    .title("Bàn chưa phục vụ")
+                    .negative(R.string.no, null)
+                    .positive(R.string.yes, () -> {
+                        dispatcher.dispatch(serveTableAfterConfirm(context, table));
+                    }).build();
+            dispatcher.dispatch(action);
+        };
     }
 
-    public static Action setCheckableTableChecked(CheckableTable item, boolean checked) {
-        return new SetCheckableTableCheckedArgs(item, checked);
+    private static DispatchAction serveTableAfterConfirm(Context context, Table table) {
+        return dispatcher -> {
+            ServiceInterface.shared(context).serveTable(table.id).then(task -> {
+                if (task.isCompleted()) {
+                    if (task.getResult().isSuccessful()) {
+                        dispatcher.dispatch(OrderActions.setTable(table, true));
+                        dispatcher.dispatch(MainActions.push(OrderFragment.class, table.name));
+                    } else {
+                        dispatcher.dispatch(MessageBoxActions.show(task.getResult().message));
+                    }
+                }
+            });
+        };
+    }
+
+    private static Action setTableListResult(List<Table> items) {
+        return new SetTableListResultArgs(items);
     }
 
     public static Action setLoadState(LoadState loadState) {
@@ -45,6 +70,6 @@ public class TableListActions {
     }
 
     public static Action setIsRefreshing(boolean refreshing) {
-        return new SetIsRefreshingArgs(TableListActions.class, refreshing);
+        return new SetIsRefreshingArgs(TableListReducer.class, refreshing);
     }
 }

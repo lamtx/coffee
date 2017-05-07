@@ -13,8 +13,12 @@ public class ServeTableResponse extends Response {
         return TextUtils.isEmpty(message);
     }
 
-    private ServeTableResponse(Reader reader) throws MissingFieldException {
+    public ServeTableResponse(Reader reader) throws MissingFieldException {
         message = reader.readString();
+    }
+
+    public ServeTableResponse(String message) {
+        this.message = message;
     }
 
     static final Parser<ServeTableResponse> PARSER = ServeTableResponse::new;

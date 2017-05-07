@@ -8,16 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="windowColor">@color/windowColor</item>
-        <item name="secondaryWindowColor">@color/windowColor</item>
+        <item name="secondaryWindowColor">@color/secondaryWindowColor</item>
         <item name="secondaryTextColor">@color/secondaryTextColor</item>
         <item name="textColor">@color/textColor</item>
         <item name="disabledTextColor">@color/disabledTextColor</item>
+
+        <item name="android:actionBarSize">44dp</item>
     </style>
 
     <style name="OuterPopup">
-        <item name="android:background">#30000000</item>
         <item name="android:clickable">true</item>
     </style>
+
     <style name="Popup">
         <item name="android:layout_marginTop">40dp</item>
         <item name="android:layout_marginBottom">40dp</item>
@@ -26,10 +28,16 @@
         <item name="android:background">@drawable/rounded_rectangle</item>
         <item name="android:elevation">4dp</item>
     </style>
+
     <style name="Title">
         <item name="android:textColor">?textColor</item>
         <item name="android:textSize">@dimen/large_font_size</item>
     </style>
+
+    <style name="Title.Light">
+        <item name="android:textColor">@color/lightTextColor</item>
+    </style>
+
     <style name="Text">
         <item name="android:textColor">?textColor</item>
         <item name="android:textSize">@dimen/medium_font_size</item>
@@ -38,6 +46,10 @@
     <style name="Dim">
         <item name="android:textColor">?secondaryTextColor</item>
         <item name="android:textSize">@dimen/medium_font_size</item>
+    </style>
+
+    <style name="Dim.Light">
+        <item name="android:textColor">@color/lightSecondaryTextColor</item>
     </style>
 
     <style name="Text.Small">
@@ -50,5 +62,31 @@
 
     <style name="Text.Small.Dim">
         <item name="android:textColor">?secondaryTextColor</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:textSize">@dimen/medium_font_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Button.Number">
+        <item name="android:textSize">@dimen/medium_font_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">86dp</item>
+        <item name="android:layout_height">64dp</item>
+    </style>
+
+    <style name="Button.Action">
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:textColor">?colorPrimary</item>
+    </style>
+
+    <style name="Button.Action.Unfocused">
+        <item name="android:textColor">?textColor</item>
+    </style>
+
+    <style name="EditText">
+        <item name="android:textColorHint">?secondaryTextColor</item>
+        <item name="android:textSize">@dimen/medium_font_size</item>
     </style>
 </resources>

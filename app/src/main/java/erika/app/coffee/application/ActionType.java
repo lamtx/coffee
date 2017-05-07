@@ -1,12 +1,11 @@
 package erika.app.coffee.application;
 
 public class ActionType {
-    public static final String UPDATE_PACKAGES_LIST = "UPDATE_PACKAGES_LIST";
-    public static final String SET_COMPONENT_STATUS = "SET_COMPONENT_STATUS";
 
     // Main
     public static final String PUSH = "PUSH";
     public static final String POP = "POP";
+    public static final String SET_APP_TITLE = "SET_APP_TITLE";
 
     // Popup
     public static final String SHOW_POPUP = "SHOW_POPUP";
@@ -24,11 +23,25 @@ public class ActionType {
     public static final String SET_HOST = "SET_HOST";
 
     // Table List
-    public static final String SET_CHECKABLE_TABLE_CHECKED = "SET_CHECKABLE_TABLE_CHECKED";
     public static final String SET_TABLE_LIST_RESULT = "SET_TABLE_LIST_RESULT";
 
-    //Order
+    // Order
     public static final String SET_TABLE_FOR_ORDER_COMPONENT = "SET_TABLE_FOR_ORDER_COMPONENT";
+
+    // Menu
     public static final String SET_MENU_CATEGORY_LIST = "SET_MENU_CATEGORY_LIST";
     public static final String SET_MENU_CATEGORY_KEYWORD = "SET_MENU_CATEGORY_KEYWORD";
+
+    // Ordered
+    public static final String SET_ORDERED_MENU_LIST = "SET_ORDERED_MENU_LIST";
+
+    // Number
+    public static final String SET_NUMBER_VALUE = "SET_NUMBER_VALUE";
+    public static final String SET_NUMBER_ACTION = "SET_NUMBER_ACTION";
+
+    // Message
+    public static final String ADD_MESSAGE = "ADD_MESSAGE";
+    public static final String REMOVE_MESSAGE = "REMOVE_MESSAGE";
+    public static final String CHANGE_MESSAGE_STATUS = "CHANGE_MESSAGE_STATUS";
+
 }

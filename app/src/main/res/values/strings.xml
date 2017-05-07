@@ -19,7 +19,7 @@
     <string name="optional_card_no">Tùy chọn</string>
     <string name="customerCardNoHint">Thẻ khách hàng</string>
     <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel">Hủy</string>
     <string name="default_description">Image</string>
     <string name="search_customer">Tìm kiếm khách hàng</string>
     <string name="input_notes">Nhập ghi chú</string>
@@ -52,8 +52,8 @@
     <string name="num_7">7</string>
     <string name="num_8">8</string>
     <string name="num_9">9</string>
-    <string name="num_10_plus">10+</string>
-    <string name="num_x">x</string>
+    <string name="num_0">0</string>
+    <string name="num_dot">.</string>
     <string name="order_colon">Đặt:</string>
     <string name="quantity_colon">Tồn kho:</string>
     <string name="actions">Tác vụ</string>
@@ -76,4 +76,11 @@
     <string name="menu">Menu</string>
     <string name="starred">Starred</string>
     <string name="recent">Recent</string>
+    <string name="no">Không</string>
+    <string name="yes">Có</string>
+    <string name="num_plus_ten">+10</string>
+    <plurals name="item_quantity">
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
 </resources>

@@ -1,15 +1,21 @@
 package erika.app.coffee.service;
 
 import android.content.Context;
+import android.view.Menu;
 
 import erika.app.coffee.App;
 import erika.app.coffee.model.ClientInfo;
+import erika.app.coffee.service.communication.MenuItem;
 import erika.app.coffee.service.communication.requests.ListOfOrderedMenuRequest;
 import erika.app.coffee.service.communication.requests.ListOfTableRequest;
+import erika.app.coffee.service.communication.requests.MenuItemChangedRequest;
 import erika.app.coffee.service.communication.requests.MenuRequest;
+import erika.app.coffee.service.communication.requests.ServeTableRequest;
 import erika.app.coffee.service.communication.responses.ListOfOrderedMenuResponse;
 import erika.app.coffee.service.communication.responses.ListOfTableResponse;
 import erika.app.coffee.service.communication.responses.MenuResponse;
+import erika.app.coffee.service.communication.responses.ServeTableResponse;
+import erika.app.coffee.service.communication.responses.SuccessResponse;
 import erika.app.coffee.utility.Mock;
 import erika.core.threading.Task;
 
@@ -61,5 +67,19 @@ public class ServiceInterface {
             return Mock.fetchOrderedMenuItems(tableId);
         }
         return client.sendRequest(new ListOfOrderedMenuRequest(tableId), ListOfOrderedMenuResponse.class);
+    }
+
+    public Task<SuccessResponse> orderItem(MenuItem menuItem, int tableId, double quantity) {
+        if (MOCK) {
+            return Mock.orderItem(menuItem, tableId, quantity);
+        }
+        return client.sendRequest(new MenuItemChangedRequest(tableId, menuItem.id, quantity, 0), SuccessResponse.class);
+    }
+
+    public Task<ServeTableResponse> serveTable(int tableId) {
+        if (MOCK) {
+            return Mock.serveTable(tableId);
+        }
+        return client.sendRequest(new ServeTableRequest(tableId), ServeTableResponse.class);
     }
 }

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/OuterPopup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        style="@style/Popup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:padding="@dimen/item_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textValue"
+                style="@style/Title"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="end|center_vertical"
+                android:textSize="@dimen/number_font_size"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/buttonClearBack"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="?selectableItemBackground"
+                android:src="@drawable/ic_backspace" />
+        </LinearLayout>
+
+        <GridLayout
+            android:id="@+id/numberContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="3">
+
+            <Button
+                style="@style/Button.Number"
+                android:tag="@string/num_7"
+                android:text="@string/num_7" />
+
+            <Button
+                style="@style/Button.Number"
+                android:tag="@string/num_8"
+                android:text="@string/num_8" />
+
+            <Button
+                style="@style/Button.Number"
+                android:tag="@string/num_9"
+                android:text="@string/num_9" />
+
+            <Button
+                style="@style/Button.Number"
+                android:tag="@string/num_4"
+                android:text="@string/num_4" />
+
+            <Button
+                style="@style/Button.Number"
+                android:tag="@string/num_5"
+                android:text="@string/num_5" />
+
+            <Button
+                style="@style/Button.Number"
+                android:tag="@string/num_6"
+                android:text="@string/num_6" />
+
+            <Button
+                style="@style/Button.Number"
+                android:tag="@string/num_1"
+                android:text="@string/num_1" />
+
+            <Button
+                style="@style/Button.Number"
+                android:tag="@string/num_2"
+                android:text="@string/num_2" />
+
+            <Button
+                style="@style/Button.Number"
+                android:tag="@string/num_3"
+                android:text="@string/num_3" />
+
+            <Button
+                android:id="@+id/buttonZero"
+                style="@style/Button.Number"
+                android:layout_width="172dp"
+                android:layout_column="0"
+                android:layout_columnSpan="2"
+                android:tag="@string/num_0"
+                android:text="@string/num_0" />
+
+            <Button
+                android:id="@+id/buttonDot"
+                style="@style/Button.Number"
+                android:tag="@string/num_dot"
+                android:text="@string/num_dot" />
+        </GridLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:id="@+id/actionLayout"
+            android:layout_marginTop="@dimen/item_padding">
+
+            <Button
+                android:id="@+id/buttonCancel"
+                style="@style/Button.Action.Unfocused"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel" />
+
+            <Button
+                android:id="@+id/buttonOk"
+                style="@style/Button.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ok" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

@@ -9,7 +9,8 @@ public class Utils {
     private static final DecimalFormat DECIMAL_FORMAT;
     static {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator('.');
+        symbols.setDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
         DECIMAL_FORMAT = new DecimalFormat("###,###,###,###", symbols);
     }
 
@@ -38,4 +39,9 @@ public class Utils {
     public static String stringFrom(int value) {
         return DECIMAL_FORMAT.format(value);
     }
+
+    public static String stringFrom(long value) {
+        return DECIMAL_FORMAT.format(value);
+    }
+
 }

@@ -5,9 +5,7 @@ import android.support.annotation.Nullable;
 
 import erika.app.coffee.action.TableListActions;
 import erika.app.coffee.application.ActionType;
-import erika.app.coffee.model.CheckableTable;
 import erika.app.coffee.model.LoadState;
-import erika.app.coffee.model.args.SetCheckableTableCheckedArgs;
 import erika.app.coffee.model.args.SetIsRefreshingArgs;
 import erika.app.coffee.model.args.SetLoadStateArgs;
 import erika.app.coffee.model.args.SetTableListResultArgs;
@@ -24,8 +22,6 @@ public class TableListReducer implements Reducer<TableListState> {
             state = new TableListState();
         }
         switch (action.getType()) {
-            case ActionType.SET_CHECKABLE_TABLE_CHECKED:
-                return setCheckableTableChecked(state, (SetCheckableTableCheckedArgs) action);
             case ActionType.SET_TABLE_LIST_RESULT:
                 return setTableListResult(state, (SetTableListResultArgs) action);
             case ActionType.SET_IS_REFRESHING:
@@ -47,23 +43,12 @@ public class TableListReducer implements Reducer<TableListState> {
     }
 
     private TableListState setIsRefreshing(TableListState state, SetIsRefreshingArgs action) {
-        if (action.callingAction == TableListActions.class) {
+        if (action.target == TableListReducer.class) {
             return Redux.copy(state, x -> {
                 x.refreshing = action.refreshing;
             });
         }
         return state;
-    }
-
-    private TableListState setCheckableTableChecked(TableListState state, SetCheckableTableCheckedArgs action) {
-        return Redux.copy(state, x -> {
-            x.items = Redux.map(x.items, e -> {
-                if (e == action.item) {
-                    return new CheckableTable(e.table, action.checked);
-                }
-                return e;
-            });
-        });
     }
 
     private TableListState setTableListResult(TableListState state, SetTableListResultArgs action) {

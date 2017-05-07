@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<erika.app.coffee.utility.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/half_item_spacing"
     android:background="@drawable/button"
-    android:clickable="true"
     android:padding="@dimen/item_padding">
 
     <LinearLayout
@@ -39,4 +38,4 @@
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_vertical_three_dots" />
 
-</erika.app.coffee.utility.CheckableLinearLayout>
+</LinearLayout>

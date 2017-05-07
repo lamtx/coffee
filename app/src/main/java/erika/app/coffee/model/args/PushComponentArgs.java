@@ -1,15 +1,13 @@
 package erika.app.coffee.model.args;
 
-import android.app.Fragment;
-import android.os.Bundle;
-
 import erika.app.coffee.application.ActionType;
+import erika.app.coffee.model.BackStackElement;
 
 public class PushComponentArgs extends Args {
-    public final Class<? extends Fragment> component;
+    public final BackStackElement element;
 
-    public PushComponentArgs(Class<? extends Fragment> component) {
+    public PushComponentArgs(BackStackElement element) {
         super(ActionType.PUSH);
-        this.component = component;
+        this.element = element;
     }
 }

@@ -1,5 +1,6 @@
 package erika.app.coffee.state;
 
 public class OrderState implements Cloneable {
-    public MenuState menuState = new MenuState();
+    public int tableId;
+    public String tableName;
 }

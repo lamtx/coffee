@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/endLayout"
+        android:layout_width="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:background="@color/flatui_color_peter_river"
+        android:layout_marginStart="1dp"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:tint="@color/lightTextColor"
+            android:id="@+id/buttonClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:padding="@dimen/item_padding"
+            android:src="@drawable/ic_close" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/item_spacing"
+        android:layout_toStartOf="@id/endLayout"
+        android:background="@color/flatui_color_peter_river">
+
+        <FrameLayout
+            android:id="@+id/indicatorLayout"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/item_padding">
+
+            <ImageView
+                android:id="@+id/checkedIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_check_circle" />
+
+            <ProgressBar
+                android:id="@+id/loadingIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminate="true" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/textMessage"
+            style="@style/Dim.Light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/item_padding"
+            android:layout_toEndOf="@id/indicatorLayout"
+            android:lines="1" />
+    </RelativeLayout>
+</RelativeLayout>

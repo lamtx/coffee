@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/flatui_color_amethyst"
     android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/textSearch"
+        style="@style/EditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_search"
+        android:hint="Find item" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -23,8 +25,12 @@
             <ExpandableListView
                 android:id="@android:id/list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:childDivider="@color/disabledTextColor"
+                android:dividerHeight="1dp" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
+
+        <include layout="@layout/empty_text" />
     </FrameLayout>
 </RelativeLayout>

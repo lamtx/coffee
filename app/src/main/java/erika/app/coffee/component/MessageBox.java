@@ -1,5 +1,6 @@
 package erika.app.coffee.component;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -35,6 +36,26 @@ public class MessageBox extends BaseFragment<MessageBoxState> {
         buttonPositive = ((TextView) view.findViewById(android.R.id.button1));
         buttonNegative = ((TextView) view.findViewById(android.R.id.button2));
         buttonNeutral = ((TextView) view.findViewById(android.R.id.button3));
+        view.setOnClickListener(v -> {
+            MessageBoxState state = getState();
+            if (state.cancellable) {
+                switch (state.defaultButton) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        if (state.positiveButton != null && state.positiveButton.action != null) {
+                            state.positiveButton.action.onClick();
+                        }
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        if (state.negativeButton != null && state.negativeButton.action != null) {
+                            state.negativeButton.action.onClick();
+                        }
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        if (state.neutralButton != null && state.neutralButton.action != null) {
+                            state.neutralButton.action.onClick();
+                        }
+                }
+                dismiss();
+            }
+        });
         return view;
     }
 

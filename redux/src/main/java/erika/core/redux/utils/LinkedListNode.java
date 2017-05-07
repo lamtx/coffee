@@ -1,4 +1,4 @@
-package erika.core.redux.utils;;
+package erika.core.redux.utils;
 
 import android.support.annotation.Nullable;
 

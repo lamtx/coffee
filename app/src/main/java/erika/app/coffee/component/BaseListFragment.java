@@ -17,9 +17,9 @@ import erika.app.coffee.presentation.ViewBinder;
 import erika.app.coffee.state.BaseListState;
 
 public abstract class BaseListFragment<State extends BaseListState<E>, E> extends BaseFragment<State> {
-    private final DataSource<E> dataSource = new DataSource<E>(null,
+    private final DataSource<E> dataSource = new DataSource<>(null,
             this::createViewBinder,
-            this::getViewType);;
+            this::getViewType);
     private SwipeRefreshLayout refreshLayout;
 
     @Nullable

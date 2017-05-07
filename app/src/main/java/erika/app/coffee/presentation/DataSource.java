@@ -35,6 +35,7 @@ public class DataSource<T> extends RecyclerView.Adapter<ViewBinder<T>> {
     public DataSource(List<T> items, ViewBinderCreator<T> viewBinderCreator) {
         this(items, viewBinderCreator, null);
     }
+
     public DataSource(ViewBinderCreator<T> viewBinderCreator, GetViewType<T> getViewType) {
         this(null, viewBinderCreator, getViewType);
     }
@@ -81,24 +82,67 @@ public class DataSource<T> extends RecyclerView.Adapter<ViewBinder<T>> {
         }
         if (items.size() == this.items.size()) {
             // Detect item changed
-            ArrayList<Integer> changedItems = new ArrayList<>();
+            int changedIndex = -1;
             for (int i = 0; i < items.size(); i++) {
                 if (this.items.get(i) != items.get(i)) {
-                    changedItems.add(i);
+                    if (changedIndex == -1) {
+                        changedIndex = i;
+                    } else {
+                        this.items = items;
+                        notifyDataSetChanged();
+                        return;
+                    }
                 }
             }
-            this.items = items;
-            for (Integer changedItem : changedItems) {
-                notifyItemChanged(changedItem);
+            if (changedIndex != -1) {
+                this.items = items;
+                notifyItemChanged(changedIndex);
+            } else {
+                this.items = items;
+                notifyDataSetChanged();
             }
         } else if (items.size() > this.items.size()) {
             // Detect item added
+            int added = items.size() - this.items.size();
+            int changedIndex = this.items.size();
+            for (int i = 0; i < this.items.size(); i++) {
+                if (this.items.get(i) != items.get(i)) {
+                    changedIndex = i;
+                    break;
+                }
+            }
+            int oldIndex = changedIndex;
+            int newIndex = oldIndex + added;
+            for (; oldIndex < this.items.size(); oldIndex++, newIndex++) {
+                if (this.items.get(oldIndex) != items.get(newIndex)) {
+                    this.items = items;
+                    notifyDataSetChanged();
+                    return;
+                }
+            }
             this.items = items;
-            notifyDataSetChanged();
+            notifyItemRangeInserted(changedIndex, added);
         } else {
             // Detect item removed
+            int removed = this.items.size() - items.size();
+            int changedIndex = items.size();
+            for (int i = 0; i < items.size(); i++) {
+                if (this.items.get(i) != items.get(i)) {
+                    changedIndex = i;
+                    break;
+                }
+            }
+            int newIndex = changedIndex;
+            int oldIndex = changedIndex + removed;
+            for (; oldIndex < this.items.size(); oldIndex++, newIndex++) {
+                if (this.items.get(oldIndex) != items.get(newIndex)) {
+                    this.items = items;
+                    notifyDataSetChanged();
+                    return;
+                }
+            }
             this.items = items;
-            notifyDataSetChanged();
+            notifyItemRangeRemoved(changedIndex, removed);
         }
     }
 }

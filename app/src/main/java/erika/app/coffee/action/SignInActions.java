@@ -52,7 +52,7 @@ public class SignInActions {
             serviceInterface.signIn(userName, password, realHost, port).then(task -> {
                 dispatcher.dispatch(LoadingDialogAction.dismiss());
                 if (task.getResult() == Client.ConnectResult.OK) {
-                    dispatcher.dispatch(MainActions.push(TableListFragment.class));
+                    dispatcher.dispatch(MainActions.push(TableListFragment.class, "Bàn"));
                 } else {
                     dispatcher.dispatch(MessageBoxActions.show("Error: " + task.getResult(), "Đăng nhập"));
                 }

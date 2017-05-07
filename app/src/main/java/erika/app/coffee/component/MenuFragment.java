@@ -12,10 +12,9 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Locale;
 
 import erika.app.coffee.R;
-import erika.app.coffee.action.MenuItemActions;
+import erika.app.coffee.action.MenuActions;
 import erika.app.coffee.action.OrderActions;
 import erika.app.coffee.application.AppState;
 import erika.app.coffee.application.BaseFragment;
@@ -25,18 +24,20 @@ import erika.app.coffee.presentation.ViewBinder;
 import erika.app.coffee.service.communication.MenuCategory;
 import erika.app.coffee.service.communication.MenuItem;
 import erika.app.coffee.state.MenuState;
+import erika.app.coffee.utility.Utils;
 import erika.core.redux.binding.DefaultTextWatcher;
 
 public class MenuFragment extends BaseFragment<MenuState> {
     private ExpandableListView listView;
     private SwipeRefreshLayout refresher;
-    private PackageAdapter adapter;
+    private MenuAdapter adapter;
     private View loadingIndicator;
+    private TextView emptyText;
 
 
     @Override
     public MenuState getStateFromStore(AppState appState) {
-        return appState.order.menuState;
+        return appState.menu;
     }
 
     @Nullable
@@ -44,20 +45,19 @@ public class MenuFragment extends BaseFragment<MenuState> {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.expandable_list, container, false);
         listView = ((ExpandableListView) view.findViewById(android.R.id.list));
+        emptyText = ((TextView) view.findViewById(android.R.id.empty));
         refresher = ((SwipeRefreshLayout) view.findViewById(R.id.refresher));
-        refresher.setOnRefreshListener(() -> {
-            refresh();
-        });
-        adapter = new PackageAdapter(null,
-                (layoutInflater, parent, groupPosition) -> new PackageBinder(layoutInflater, parent),
-                (layoutInflater, parent, position) -> new ComponentBinder(layoutInflater, parent)
+        refresher.setOnRefreshListener(this::refresh);
+        adapter = new MenuAdapter(null,
+                (layoutInflater, parent, groupPosition) -> new CategoryBinder(layoutInflater, parent),
+                (layoutInflater, parent, position) -> new ItemBinder(layoutInflater, parent)
         );
         loadingIndicator = inflater.inflate(R.layout.item_loading_indicator, listView, false);
         listView.setAdapter(adapter);
         ((EditText) view.findViewById(R.id.textSearch)).addTextChangedListener(new DefaultTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                searchMenu(s.toString());
+                //searchMenu(s.toString());
             }
         });
         return view;
@@ -75,6 +75,7 @@ public class MenuFragment extends BaseFragment<MenuState> {
         } else {
             listView.removeFooterView(loadingIndicator);
         }
+        emptyText.setVisibility(state.items.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -86,28 +87,32 @@ public class MenuFragment extends BaseFragment<MenuState> {
     }
 
     private void refresh() {
-        dispatch(MenuItemActions.setIsRefreshing(true));
+        dispatch(MenuActions.setIsRefreshing(true));
         if (getState().loadState != LoadState.LOADING) {
-            dispatch(MenuItemActions.fetchMenuItems(getActivity(), getState().keyword));
+            dispatch(MenuActions.fetchMenuItems(getActivity(), getState().keyword));
         }
     }
 
 
     private void searchMenu(String keyword) {
         dispatch(OrderActions.setMenuCategoryKeyword(keyword));
-        dispatch(MenuItemActions.search(getState().noneFilteredItems, keyword));
+        dispatch(MenuActions.search(getState().noneFilteredItems, keyword));
+    }
+
+    private void addOneItem(MenuItem item) {
+        dispatch(MenuActions.order(getActivity(), item, getState().tableId, 1));
     }
 
     private void addMenuItem(MenuItem item) {
-
+        dispatch(MenuActions.showNumberDialog(getActivity(), item, getState().tableId));
     }
 
-    private static class PackageBinder extends ViewBinder<MenuCategory> {
+    private static class CategoryBinder extends ViewBinder<MenuCategory> {
 
         private final TextView textName;
         private final TextView textCount;
 
-        PackageBinder(LayoutInflater inflater, ViewGroup parent) {
+        CategoryBinder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.item_menu_category, parent, false));
             textName = (TextView) itemView.findViewById(R.id.textName);
             textCount = (TextView) itemView.findViewById(R.id.textCount);
@@ -117,20 +122,23 @@ public class MenuFragment extends BaseFragment<MenuState> {
         public void bind() {
             MenuCategory item = getItem();
             textName.setText(item.name);
-            textCount.setText(String.valueOf(item.items.size()));
+            textCount.setText(textCount.getContext().getResources().getQuantityString(R.plurals.item_quantity, item.items.size(), item.items.size()));
         }
     }
 
-    private class ComponentBinder extends ViewBinder<MenuItem> {
+    private class ItemBinder extends ViewBinder<MenuItem> {
 
         private final TextView textName;
         private final TextView textDescription;
 
-        ComponentBinder(LayoutInflater inflater, ViewGroup parent) {
+        ItemBinder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.item_menu_item, parent, false));
             textName = (TextView) itemView.findViewById(R.id.textName);
             textDescription = (TextView) itemView.findViewById(R.id.textDescription);
             itemView.findViewById(R.id.buttonAdd).setOnClickListener(v -> {
+                addOneItem(getItem());
+            });
+            itemView.setOnClickListener(v -> {
                 addMenuItem(getItem());
             });
         }
@@ -139,12 +147,12 @@ public class MenuFragment extends BaseFragment<MenuState> {
         public void bind() {
             MenuItem item = getItem();
             textName.setText(item.name);
-            textDescription.setText(String.format(Locale.getDefault(), "%,8d", item.price));
+            textDescription.setText(Utils.stringFrom(item.price));
         }
     }
 
-    private class PackageAdapter extends ExpandableDataSource<MenuCategory, MenuItem> {
-        PackageAdapter(List<MenuCategory> parents, HeaderViewBinderCreator<MenuCategory> headerViewBinderCreator, ViewBinderCreator<MenuItem> viewBinderCreator) {
+    private class MenuAdapter extends ExpandableDataSource<MenuCategory, MenuItem> {
+        MenuAdapter(List<MenuCategory> parents, HeaderViewBinderCreator<MenuCategory> headerViewBinderCreator, ViewBinderCreator<MenuItem> viewBinderCreator) {
             super(parents, headerViewBinderCreator, viewBinderCreator);
         }
 
@@ -152,5 +160,6 @@ public class MenuFragment extends BaseFragment<MenuState> {
         protected List<MenuItem> getChildren(MenuCategory parent) {
             return parent.items;
         }
+
     }
 }

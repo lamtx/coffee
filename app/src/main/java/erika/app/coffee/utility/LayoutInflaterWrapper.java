@@ -15,6 +15,7 @@ public class LayoutInflaterWrapper extends LayoutInflater {
             "android.app."
     };
     private static Typeface regularTypeface = null;
+    private static Typeface boldTypeface = null;
 
     public LayoutInflaterWrapper(Context context) {
         super(context);
@@ -29,12 +30,20 @@ public class LayoutInflaterWrapper extends LayoutInflater {
         return new LayoutInflaterWrapper(newContext);
     }
 
-    public static Typeface getRegularTypeface(Context context) {
+    private static Typeface getRegularTypeface(Context context) {
         if (regularTypeface == null) {
-            regularTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Regular.ttf");
+            regularTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
         }
         return regularTypeface;
     }
+
+    private static Typeface getBoldTypeface(Context context) {
+        if (boldTypeface == null) {
+            boldTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Medium.ttf");
+        }
+        return boldTypeface;
+    }
+
 
     @Override
     protected View onCreateView(String name, AttributeSet attrs) throws ClassNotFoundException {
@@ -52,7 +61,9 @@ public class LayoutInflaterWrapper extends LayoutInflater {
             view = super.onCreateView(name, attrs);
         }
         if (view instanceof TextView) {
-            ((TextView) view).setTypeface(getRegularTypeface(getContext()));
+            TextView textView = (TextView) view;
+            boolean bold = textView.getTypeface().getStyle() == Typeface.BOLD;
+            textView.setTypeface(bold ? getBoldTypeface(getContext()) : getRegularTypeface(getContext()));
         }
         return view;
     }

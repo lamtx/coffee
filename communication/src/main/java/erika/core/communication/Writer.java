@@ -38,6 +38,12 @@ public final class Writer {
         write(milliseconds);
         return this;
     }
+
+    public Writer write(double value) {
+        appendSeparator();
+        sb.append(value);
+        return this;
+    }
 //
 //    public Writer write(Writable value) {
 //        write(value != null);

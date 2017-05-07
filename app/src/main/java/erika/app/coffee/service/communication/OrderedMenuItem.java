@@ -8,7 +8,7 @@ import erika.core.communication.Reader;
 
 public class OrderedMenuItem {
     public MenuItem menuItem;
-    public int quantity;
+    public double quantity;
     public int id;
 
     @Override
@@ -19,7 +19,7 @@ public class OrderedMenuItem {
     public OrderedMenuItem() {
     }
 
-    public OrderedMenuItem(MenuItem menuItem, int quantity, int id) {
+    public OrderedMenuItem(MenuItem menuItem, double quantity, int id) {
         this.menuItem = menuItem;
         this.quantity = quantity;
         this.id = id;
@@ -27,7 +27,7 @@ public class OrderedMenuItem {
 
     public OrderedMenuItem(Parcel in) {
         menuItem = in.readParcelable(OrderedMenuItem.class.getClassLoader());
-        quantity = in.readInt();
+        quantity = in.readDouble();
         id = in.readInt();
     }
 

@@ -53,22 +53,22 @@ public class NoneKeepAliveClient<T extends ReadableMessage> {
             @Override
             protected ResponseWrapper<X> doInBackground(Void... params) {
                 if (!establishConnection()) {
-                    return new ResponseWrapper<>(SocketStatus.CannotConnect, null, null);
+                    return new ResponseWrapper<>(SocketStatus.CANNOT_CONNECT, null, null);
                 }
                 try {
                     sendRequest(request);
                     X response = waitForResponse();
-                    return new ResponseWrapper<>(SocketStatus.Ok, response, null);
+                    return new ResponseWrapper<>(SocketStatus.OK, response, null);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return new ResponseWrapper<>(SocketStatus.ParseError, null, e);
+                    return new ResponseWrapper<>(SocketStatus.PARSE_ERROR, null, e);
                 } finally {
                     close();
                 }
             }
 
             protected void onPostExecute(ResponseWrapper<X> result) {
-                if (result.status == SocketStatus.Ok) {
+                if (result.status == SocketStatus.OK) {
                     onCompleted.onReceiveResponse(result.response);
                 } else {
                     String message = null;

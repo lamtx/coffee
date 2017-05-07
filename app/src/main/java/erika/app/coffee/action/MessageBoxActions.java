@@ -68,8 +68,11 @@ public class MessageBoxActions {
             return this;
         }
 
-        public Action build() {
-            return new SetMessageBoxArgs(state);
+        public DispatchAction build() {
+            return dispatcher -> {
+                dispatcher.dispatch(new SetMessageBoxArgs(state));
+                dispatcher.dispatch(show());
+            };
         }
     }
 
@@ -83,9 +86,8 @@ public class MessageBoxActions {
 
     public static DispatchAction show(String message, String title, MessageBoxState.Action okAction) {
         return dispatcher -> {
-            Action action = new Builder().message(message).title(title).positive(android.R.string.ok, okAction).build();
+            DispatchAction action = new Builder().message(message).title(title).positive(android.R.string.ok, okAction).build();
             dispatcher.dispatch(action);
-            dispatcher.dispatch(show());
         };
     }
 

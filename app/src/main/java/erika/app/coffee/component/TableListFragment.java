@@ -12,7 +12,6 @@ import erika.app.coffee.action.MainActions;
 import erika.app.coffee.action.OrderActions;
 import erika.app.coffee.action.TableListActions;
 import erika.app.coffee.application.AppState;
-import erika.app.coffee.model.CheckableTable;
 import erika.app.coffee.model.LoadState;
 import erika.app.coffee.model.TableStatus;
 import erika.app.coffee.presentation.ViewBinder;
@@ -20,7 +19,7 @@ import erika.app.coffee.service.communication.Table;
 import erika.app.coffee.state.TableListState;
 import erika.app.coffee.utility.Utils;
 
-public class TableListFragment extends BaseListFragment<TableListState, CheckableTable> {
+public class TableListFragment extends BaseListFragment<TableListState, Table> {
 
     @Override
     protected int getLayoutId() {
@@ -28,7 +27,7 @@ public class TableListFragment extends BaseListFragment<TableListState, Checkabl
     }
 
     @Override
-    protected ViewBinder<CheckableTable> createViewBinder(LayoutInflater inflater, ViewGroup parent, int viewType) {
+    protected ViewBinder<Table> createViewBinder(LayoutInflater inflater, ViewGroup parent, int viewType) {
         return new ItemHolder(inflater, parent);
     }
 
@@ -58,7 +57,7 @@ public class TableListFragment extends BaseListFragment<TableListState, Checkabl
         }
     }
 
-    private class ItemHolder extends ViewBinder<CheckableTable> {
+    private class ItemHolder extends ViewBinder<Table> {
         private final TextView textPrice;
         private final TextView textName;
         private final boolean enableMenu;
@@ -72,12 +71,12 @@ public class TableListFragment extends BaseListFragment<TableListState, Checkabl
             textPrice = (TextView) itemView.findViewById(R.id.textPrice);
             buttonMenu = itemView.findViewById(R.id.buttonMenu);
             itemView.setOnClickListener(v -> {
-                openTable(getItem().table);
+                openTable(getItem());
             });
 
             if (enableMenu) {
                 buttonMenu.setOnClickListener(v -> {
-                    showMenu(v, getItem().table);
+                    showMenu(v, getItem());
                 });
             } else {
                 buttonMenu.setVisibility(View.GONE);
@@ -86,11 +85,10 @@ public class TableListFragment extends BaseListFragment<TableListState, Checkabl
 
         @Override
         public void bind() {
-            CheckableTable item = getItem();
-            textName.setText(item.table.name);
-            textPrice.setText(Utils.stringFrom(item.table.price));
-            itemView.setBackgroundResource(getColor(item.table.status));
-            ((Checkable) itemView).setChecked(item.checked);
+            Table item = getItem();
+            textName.setText(item.name);
+            textPrice.setText(Utils.stringFrom(item.price));
+            itemView.setBackgroundResource(getColor(item.status));
         }
     }
 
@@ -129,12 +127,10 @@ public class TableListFragment extends BaseListFragment<TableListState, Checkabl
         switch (table.status) {
             case BUSY:
                 dispatch(OrderActions.setTable(table, true));
-                dispatch(MainActions.push(OrderFragment.class));
+                dispatch(MainActions.push(OrderFragment.class, ""));
                 break;
             case AVAILABLE:
-//                Intent i = new Intent(getActivity(), SelectCustomerActivity.class);
-//                i.putExtras(SelectCustomerActivity.newArgs(table));
-//                startActivityForResult(i, REQUEST_BOOKING);
+                dispatch(TableListActions.serveTable(getActivity(), table));
                 break;
             default:
                 break;

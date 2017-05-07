@@ -172,7 +172,7 @@ public abstract class ImmutableEnumSet<E extends Enum<E>> implements Set<E> {
                     throw new NoSuchElementException();
                 lastReturned = unseen & -unseen;
                 unseen -= lastReturned;
-                return (E) universe[Long.numberOfTrailingZeros(lastReturned)];
+                return universe[Long.numberOfTrailingZeros(lastReturned)];
             }
         }
     }

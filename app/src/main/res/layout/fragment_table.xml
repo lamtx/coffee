@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:id="@+id/refresher"
+    android:background="?secondaryWindowColor"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,7 +12,8 @@
         android:layout_height="match_parent"
         android:padding="@dimen/half_item_spacing"
         app:layoutManager="@string/gridLayoutManager"
-        app:spanCount="2">
+        app:spanCount="@integer/table_columns">
 
     </android.support.v7.widget.RecyclerView>
 </android.support.v4.widget.SwipeRefreshLayout>
+

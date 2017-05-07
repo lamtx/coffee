@@ -1,5 +1,6 @@
 package erika.app.coffee.state;
 
+import android.content.DialogInterface;
 import android.support.annotation.StringRes;
 
 import erika.core.redux.Action;
@@ -36,4 +37,8 @@ public class MessageBoxState implements Cloneable {
     public Button positiveButton;
     public Button negativeButton;
     public Button neutralButton;
+
+    public boolean cancellable = true;
+
+    public int defaultButton = DialogInterface.BUTTON_NEGATIVE;
 }

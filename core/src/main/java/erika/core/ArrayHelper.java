@@ -1,5 +1,7 @@
 package erika.core;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -87,6 +89,7 @@ public class ArrayHelper {
     public static <Parent, Child extends Parent> Iterable<Parent> upCast(final Iterable<Child> child) {
         return new Iterable<Parent>() {
 
+            @NonNull
             @Override
             public Iterator<Parent> iterator() {
                 return new Iterator<Parent>() {
@@ -127,6 +130,7 @@ public class ArrayHelper {
 
         return new Iterable<T>() {
 
+            @NonNull
             @Override
             public Iterator<T> iterator() {
                 return new Iterator<T>() {
