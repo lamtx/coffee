@@ -2,7 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/item_padding">
+    android:background="?selectableItemBackground"
+    android:paddingTop="@dimen/half_item_spacing"
+    android:paddingBottom="@dimen/half_item_spacing"
+    android:paddingEnd="0dp"
+    android:paddingStart="@dimen/item_padding">
 
     <TextView
         android:id="@+id/textName"

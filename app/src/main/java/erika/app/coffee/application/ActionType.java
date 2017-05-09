@@ -27,6 +27,7 @@ public class ActionType {
 
     // Order
     public static final String SET_TABLE_FOR_ORDER_COMPONENT = "SET_TABLE_FOR_ORDER_COMPONENT";
+    public static final String SET_LEFT_PANEL_WIDTH = "SET_LEFT_PANEL_WIDTH";
 
     // Menu
     public static final String SET_MENU_CATEGORY_LIST = "SET_MENU_CATEGORY_LIST";

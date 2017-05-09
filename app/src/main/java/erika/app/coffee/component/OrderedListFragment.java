@@ -3,8 +3,12 @@ package erika.app.coffee.component;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -12,6 +16,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import erika.app.coffee.R;
+import erika.app.coffee.action.OrderActions;
 import erika.app.coffee.action.OrderedListActions;
 import erika.app.coffee.application.AppState;
 import erika.app.coffee.application.BaseFragment;
@@ -19,7 +24,6 @@ import erika.app.coffee.model.LoadState;
 import erika.app.coffee.presentation.DataSource;
 import erika.app.coffee.presentation.ViewBinder;
 import erika.app.coffee.service.communication.OrderedMenuItem;
-import erika.app.coffee.state.BaseListState;
 import erika.app.coffee.state.OrderedListState;
 import erika.app.coffee.utility.Utils;
 
@@ -28,6 +32,8 @@ public class OrderedListFragment extends BaseFragment<OrderedListState> {
             this::createViewBinder,
             null);
     private SwipeRefreshLayout refreshLayout;
+    float x = 0;
+    float y = 0;
 
     @Nullable
     @Override
@@ -38,6 +44,9 @@ public class OrderedListFragment extends BaseFragment<OrderedListState> {
         if (refreshLayout != null) {
             refreshLayout.setOnRefreshListener(this::onRefreshRequested);
         }
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(listView.getContext(),
+                ((LinearLayoutManager) listView.getLayoutManager()).getOrientation());
+        listView.addItemDecoration(dividerItemDecoration);
         listView.setAdapter(dataSource);
         return view;
     }

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import erika.app.coffee.application.ActionType;
+import erika.app.coffee.model.args.SetLeftPanelWidthArgs;
 import erika.app.coffee.model.args.SetTableForOrderComponentArgs;
 import erika.app.coffee.state.OrderState;
 import erika.core.redux.Action;
@@ -20,9 +21,18 @@ public class OrderReducer implements Reducer<OrderState> {
         switch (action.getType()) {
             case ActionType.SET_TABLE_FOR_ORDER_COMPONENT:
                 return setTable(state, (SetTableForOrderComponentArgs) action);
+            case ActionType.SET_LEFT_PANEL_WIDTH:
+                return resizeLeftPanel(state, (SetLeftPanelWidthArgs) action);
+
             default:
                 return state;
         }
+    }
+
+    private OrderState resizeLeftPanel(OrderState state, SetLeftPanelWidthArgs action) {
+        return Redux.copy(state, x -> {
+            x.leftPanelWidth = action.width;
+        });
     }
 
     private OrderState setTable(OrderState state, SetTableForOrderComponentArgs action) {

@@ -1,67 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/vertical_text_spacing"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/vertical_text_spacing">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editTextUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_margin="5dp"
-        android:ems="10"
-        android:hint="@string/username"
-        android:imeOptions="actionNext"
-        android:inputType="textNoSuggestions|textVisiblePassword"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_margin="5dp"
-        android:ems="10"
-        android:hint="@string/password"
-        android:imeOptions="actionDone"
-        android:inputType="textPassword"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <EditText
-        android:id="@+id/editTextAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_margin="5dp"
-        android:ems="10"
-        android:hint="@string/ip_address"
-        android:imeOptions="actionDone"
-        android:inputType="textUri"
-        android:text="@string/default_ip_address"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <CheckBox
-        android:id="@+id/checkSaved"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_margin="5dp"
-        android:ems="10"
-        android:text="@string/remember_me"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:minWidth="320dp"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/vertical_text_spacing"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/vertical_text_spacing">
 
-    <Button
-        android:id="@+id/buttonLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:focusable="true"
-        android:gravity="center"
-        android:text="@string/login" />
-</LinearLayout>
+        <EditText
+            android:id="@+id/editTextUsername"
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_margin="5dp"
+            android:ems="10"
+            android:hint="@string/username"
+            android:imeOptions="actionNext"
+            android:inputType="textNoSuggestions|textVisiblePassword" />
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_margin="5dp"
+            android:ems="10"
+            android:hint="@string/password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/editTextAddress"
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_margin="5dp"
+            android:ems="10"
+            android:hint="@string/ip_address"
+            android:imeOptions="actionDone"
+            android:inputType="textUri"
+            android:text="@string/default_ip_address" />
+
+        <CheckBox
+            android:id="@+id/checkSaved"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_margin="5dp"
+            android:ems="10"
+            android:text="@string/remember_me"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/buttonLogin"
+            style="@style/Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="@string/login" />
+    </LinearLayout>
+</FrameLayout>

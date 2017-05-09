@@ -9,6 +9,7 @@ import erika.app.coffee.action.OrderedListActions;
 import erika.app.coffee.application.ActionType;
 import erika.app.coffee.model.LoadState;
 import erika.app.coffee.model.args.SetIsRefreshingArgs;
+import erika.app.coffee.model.args.SetLeftPanelWidthArgs;
 import erika.app.coffee.model.args.SetLoadStateArgs;
 import erika.app.coffee.model.args.SetOrderedMenuListArgs;
 import erika.app.coffee.model.args.SetTableForOrderComponentArgs;
@@ -71,5 +72,4 @@ public class OrderedListReducer implements Reducer<OrderedListState> {
             x.refreshing = false;
         });
     }
-
 }
