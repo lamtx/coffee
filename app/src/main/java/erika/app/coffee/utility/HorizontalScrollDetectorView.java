@@ -3,8 +3,8 @@ package erika.app.coffee.utility;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
@@ -12,7 +12,7 @@ public class HorizontalScrollDetectorView extends FrameLayout {
     public interface OnScrollListener {
         boolean onAcceptTouch(float x, float y);
 
-        void onScroll(float distanceX, float distanceY);
+        void onScroll(float distanceX);
     }
 
     private OnScrollListener onScrollListener;
@@ -20,6 +20,8 @@ public class HorizontalScrollDetectorView extends FrameLayout {
     private boolean scrollInitialized = false;
     private float x;
     private float y;
+    private boolean swiping = false;
+
     public HorizontalScrollDetectorView(@NonNull Context context) {
         super(context);
         init(context);
@@ -56,7 +58,13 @@ public class HorizontalScrollDetectorView extends FrameLayout {
     }
 
     private boolean onDetectScroll(MotionEvent event) {
-        switch (event.getAction()) {
+        int action = MotionEventCompat.getActionMasked(event);
+
+        switch (action) {
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+                swiping = false;
+                return false;
             case MotionEvent.ACTION_DOWN:
                 x = event.getX();
                 y = event.getY();
@@ -67,16 +75,22 @@ public class HorizontalScrollDetectorView extends FrameLayout {
                 float distanceY = event.getY() - y;
                 x = event.getX();
                 y = event.getY();
-                if (!scrollInitialized && Math.abs(distanceY) > 10) {
+                if (!scrollInitialized && Math.abs(distanceX) < Math.abs(distanceY)) {
                     return false;
                 }
+                swiping = true;
                 scrollInitialized = true;
                 if (onScrollListener != null) {
-                    onScrollListener.onScroll(distanceX, distanceY);
+                    onScrollListener.onScroll(distanceX);
                 }
                 return true;
             default:
                 return false;
         }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return swiping;
     }
 }

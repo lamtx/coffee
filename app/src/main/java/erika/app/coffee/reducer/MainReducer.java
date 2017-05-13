@@ -7,11 +7,14 @@ import erika.app.coffee.application.ActionType;
 import erika.app.coffee.model.BackStackElement;
 import erika.app.coffee.model.args.PushComponentArgs;
 import erika.app.coffee.model.args.SetAppTitleArgs;
+import erika.app.coffee.model.args.SetClientStatus;
+import erika.app.coffee.model.args.SetRootArgs;
 import erika.app.coffee.model.args.ShowPopupArgs;
 import erika.app.coffee.state.MainState;
 import erika.core.redux.Action;
 import erika.core.redux.Reducer;
 import erika.core.redux.Redux;
+import erika.core.redux.immutable.ImmutableStack;
 
 public class MainReducer implements Reducer<MainState> {
     @NonNull
@@ -31,6 +34,10 @@ public class MainReducer implements Reducer<MainState> {
                 return dismissPopup(state);
             case ActionType.SET_APP_TITLE:
                 return setAppTitle(state, (SetAppTitleArgs) action);
+            case ActionType.SET_ROOT:
+                return setRoot(state, (SetRootArgs) action);
+            case ActionType.SET_CLIENT_STATUS:
+                return setClientStatus(state, (SetClientStatus) action);
             default:
                 return state;
         }
@@ -71,6 +78,19 @@ public class MainReducer implements Reducer<MainState> {
         return Redux.copy(state, x -> {
             x.title = action.title;
             x.subtitle = action.subtitle;
+        });
+    }
+
+    private MainState setRoot(MainState state, SetRootArgs action) {
+        return Redux.copy(state, x -> {
+            x.backStack = new ImmutableStack<>(action.element);
+        });
+    }
+
+    private MainState setClientStatus(MainState state, SetClientStatus action) {
+        return Redux.copy(state, x -> {
+            x.clientMessage = action.message;
+            x.clientStatus = action.status;
         });
     }
 }

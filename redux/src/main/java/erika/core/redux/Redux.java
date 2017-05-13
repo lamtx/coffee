@@ -6,8 +6,6 @@ import android.util.SparseArray;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import erika.core.redux.utils.Predicate;
@@ -91,7 +89,7 @@ public class Redux {
 
     @CheckResult
     public static <T> SparseArray<T> put(SparseArray<T> source, int key, T value) {
-        SparseArray<T> destination = new SparseArray<T>();
+        SparseArray<T> destination = new SparseArray<>();
         for (int i = 0; i < source.size(); i++) {
             int e = source.keyAt(i);
             destination.put(e, source.get(e));

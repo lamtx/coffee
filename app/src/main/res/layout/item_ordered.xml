@@ -2,10 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/half_item_spacing"
+    android:background="?selectableItemBackground"
     android:paddingBottom="@dimen/half_item_spacing"
     android:paddingEnd="0dp"
-    android:paddingStart="@dimen/item_padding">
+    android:paddingStart="@dimen/item_padding"
+    android:paddingTop="@dimen/half_item_spacing">
 
     <TextView
         android:id="@+id/textName"
@@ -14,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:paddingEnd="3dp"
+        android:paddingStart="0dp"
         android:text="This is a long text" />
 
     <LinearLayout
@@ -43,15 +45,4 @@
             android:layout_height="wrap_content"
             android:text="description" />
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/buttonAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:background="?selectableItemBackground"
-        android:padding="@dimen/item_padding"
-        android:src="@drawable/ic_plus" />
-
 </RelativeLayout>

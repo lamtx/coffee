@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/refresher"
-    android:background="?secondaryWindowColor"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@android:id/list"
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/refresher"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/half_item_spacing"
-        app:layoutManager="@string/gridLayoutManager"
-        app:spanCount="@integer/table_columns">
+        android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
-</android.support.v4.widget.SwipeRefreshLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/half_item_spacing"
+            app:layoutManager="@string/gridLayoutManager"
+            app:spanCount="@integer/table_columns" />
 
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include layout="@layout/empty_text" />
+</FrameLayout>

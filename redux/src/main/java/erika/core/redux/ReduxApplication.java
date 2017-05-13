@@ -14,18 +14,27 @@ public abstract class ReduxApplication<AppState> extends Application {
     public void onCreate() {
         super.onCreate();
         store = createStore();
-        store.dispatch(new EmptyAction());
+        dispatch(EMPTY_ACTION);
     }
 
     public Store<AppState> getStore() {
         return store;
     }
 
-    private static class EmptyAction implements Action {
+    public void dispatch(Action action) {
+        store.dispatch(action);
+    }
+
+    public void dispatch(DispatchAction action) {
+        store.dispatch(action);
+    }
+
+    public static final Action EMPTY_ACTION = new Action() {
 
         @Override
         public String getType() {
             return "";
         }
-    }
+    };
+
 }

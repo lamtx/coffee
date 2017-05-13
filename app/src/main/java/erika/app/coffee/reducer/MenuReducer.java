@@ -3,7 +3,6 @@ package erika.app.coffee.reducer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import erika.app.coffee.action.MenuActions;
 import erika.app.coffee.application.ActionType;
 import erika.app.coffee.model.LoadState;
 import erika.app.coffee.model.args.SetIsRefreshingArgs;

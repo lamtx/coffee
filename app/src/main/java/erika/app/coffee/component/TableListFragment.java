@@ -1,9 +1,13 @@
 package erika.app.coffee.component;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Checkable;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -27,6 +31,30 @@ public class TableListFragment extends BaseListFragment<TableListState, Table> {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.table, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sign_out:
+                dispatch(MainActions.signOut(getActivity()));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    @Override
     protected ViewBinder<Table> createViewBinder(LayoutInflater inflater, ViewGroup parent, int viewType) {
         return new ItemHolder(inflater, parent);
     }
@@ -46,7 +74,6 @@ public class TableListFragment extends BaseListFragment<TableListState, Table> {
 
     @Override
     protected void onRefreshRequested() {
-        super.onRefreshRequested();
         refresh();
     }
 
@@ -119,7 +146,7 @@ public class TableListFragment extends BaseListFragment<TableListState, Table> {
             }
             return true;
         });
-        popup.inflate(R.menu.busy_or_pending_table);
+        popup.inflate(R.menu.busy_table_item);
         popup.show();
     }
 

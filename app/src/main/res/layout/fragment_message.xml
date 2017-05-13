@@ -15,6 +15,6 @@
             android:layout_gravity="bottom"
             android:orientation="vertical"
             app:stackFromEnd="true"
-            app:layoutManager="@string/linearLayoutManager" />
+            app:layoutManager="erika.app.coffee.utility.NoneScrollableLinearLayoutManager" />
     </FrameLayout>
 </FrameLayout>

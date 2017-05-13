@@ -5,10 +5,10 @@ import erika.core.communication.MissingFieldException;
 import erika.core.communication.ObjectReader;
 import erika.core.communication.Reader;
 
-public class Table {
+public class Table implements Cloneable {
     public final int id;
     public final String name;
-    public final TableStatus status;
+    public TableStatus status;
     public final long price;
 
     public Table(int id, String name, TableStatus status, long price) {

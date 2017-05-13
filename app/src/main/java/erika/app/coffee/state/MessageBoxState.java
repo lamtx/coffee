@@ -3,8 +3,6 @@ package erika.app.coffee.state;
 import android.content.DialogInterface;
 import android.support.annotation.StringRes;
 
-import erika.core.redux.Action;
-
 public class MessageBoxState implements Cloneable {
     public interface Action {
         void onClick();

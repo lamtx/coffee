@@ -4,16 +4,25 @@ import android.text.Editable;
 import android.text.TextWatcher;
 
 public abstract class DefaultTextWatcher implements TextWatcher {
+    private String previous = null;
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    public final void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
     }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    public final void onTextChanged(CharSequence s, int start, int before, int count) {
 
     }
 
     @Override
-    public abstract void afterTextChanged(Editable s);
+    public final void afterTextChanged(Editable s) {
+        String value = s.toString();
+        if (!value.equals(previous)) {
+            previous = value;
+            onTextChanged(value);
+        }
+    }
+
+    protected  abstract void onTextChanged(String value);
 }

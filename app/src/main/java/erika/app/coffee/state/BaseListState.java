@@ -9,4 +9,8 @@ public class BaseListState<T> implements Cloneable {
     public List<T> items = Collections.emptyList();
     public LoadState loadState = LoadState.NONE;
     public boolean refreshing = false;
+
+    public List<T> getItems() {
+        return items;
+    }
 }

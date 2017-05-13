@@ -3,7 +3,6 @@ package erika.app.coffee.component;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +55,8 @@ public class MenuFragment extends BaseFragment<MenuState> {
         listView.setAdapter(adapter);
         ((EditText) view.findViewById(R.id.textSearch)).addTextChangedListener(new DefaultTextWatcher() {
             @Override
-            public void afterTextChanged(Editable s) {
-                //searchMenu(s.toString());
+            protected void onTextChanged(String value) {
+                searchMenu(value);
             }
         });
         return view;

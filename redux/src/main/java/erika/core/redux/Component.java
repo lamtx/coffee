@@ -9,4 +9,5 @@ public interface Component<AppState, State> {
     State getStateFromStore(AppState state);
 
     void willReceiveState(State state);
+
 }

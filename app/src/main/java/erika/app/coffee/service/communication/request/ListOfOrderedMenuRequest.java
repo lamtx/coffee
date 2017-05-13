@@ -1,4 +1,4 @@
-package erika.app.coffee.service.communication.requests;
+package erika.app.coffee.service.communication.request;
 
 import erika.core.communication.Writer;
 

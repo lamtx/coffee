@@ -1,14 +1,11 @@
 package erika.app.coffee.action;
 
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import erika.app.coffee.component.NumberFragment;
-import erika.app.coffee.model.InputNumberMode;
 import erika.app.coffee.model.args.SetNumberActionArgs;
 import erika.app.coffee.model.args.SetNumberValueArgs;
 import erika.app.coffee.model.args.ShowPopupArgs;
-import erika.app.coffee.service.communication.MenuItem;
 import erika.app.coffee.state.NumberState;
 import erika.core.redux.Action;
 import erika.core.redux.DispatchAction;

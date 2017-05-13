@@ -1,25 +1,17 @@
 package erika.core.redux;
 
+import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 public abstract class ReduxActivity<AppState, State> extends AppCompatActivity implements Component<AppState, State> {
     private State state;
-
-    private Store<AppState> getStore() {
-        @SuppressWarnings({"unchecked"})
-        ReduxApplication<AppState> application = (ReduxApplication<AppState>) getApplication();
-        return application.getStore();
-
-    }
-
+    private Store<AppState> store;
+    private boolean bound = false;
     @Override
     public State getState() {
         return state;
-    }
-
-    private void setState(State state) {
-        this.state = state;
     }
 
     @Override
@@ -37,34 +29,50 @@ public abstract class ReduxActivity<AppState, State> extends AppCompatActivity i
     }
 
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        @SuppressWarnings({"unchecked"})
+        ReduxApplication<AppState> application = (ReduxApplication<AppState>) getApplication();
+        store = application.getStore();
+        state = getStateFromStore(store.getState());
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
-        getStore().registerStateChangedListener(onStateChangedListener);
-        rebindState(getStore().getState());
+        store.registerStateChangedListener(onStateChangedListener);
+        rebindState(store.getState());
     }
 
     @Override
     protected void onStop() {
+        store.unregisterStateChangedListener(onStateChangedListener);
         super.onStop();
-        getStore().unregisterStateChangedListener(onStateChangedListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        store = null;
+        super.onDestroy();
     }
 
     private void rebindState(AppState newAppState) {
         State oldState = getState();
         State newState = getStateFromStore(newAppState);
-        if (newState != oldState) {
+        if (!bound || newState != oldState) {
+            bound = true;
             willReceiveState(newState);
-            setState(newState);
+            state = newState;
             bindStateToView(newState);
         }
     }
 
     public void dispatch(Action action) {
-        getStore().dispatch(action);
+        store.dispatch(action);
     }
 
     public void dispatch(DispatchAction action) {
-        getStore().dispatch(action);
+        store.dispatch(action);
     }
 
     private final Store.OnStateChangedListener<AppState> onStateChangedListener = new Store.OnStateChangedListener<AppState>() {

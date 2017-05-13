@@ -4,17 +4,18 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.widget.Toolbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 
 import erika.app.coffee.action.MainActions;
 import erika.app.coffee.action.PopupActions;
 import erika.app.coffee.application.AppState;
 import erika.app.coffee.application.BaseActivity;
-import erika.app.coffee.model.BackStackElement;
 import erika.app.coffee.model.TransitionStyle;
+import erika.app.coffee.service.Client;
 import erika.app.coffee.state.MainState;
 import erika.app.coffee.utility.LayoutInflaterWrapper;
 
@@ -27,7 +28,12 @@ public class MainActivity extends BaseActivity<MainState> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+            if (getState().backStack.size() > 1) {
+                dispatch(MainActions.pop());
+            }
+        });
     }
 
     @Override
@@ -62,14 +68,31 @@ public class MainActivity extends BaseActivity<MainState> {
     public void bindStateToView(MainState state) {
         super.bindStateToView(state);
         toolbar.setTitle(state.title);
-        toolbar.setSubtitle(state.subtitle);
+        toolbar.setSubtitle(state.clientStatus != null && state.clientStatus != Client.Status.CONNECTED ? state.clientMessage : state.subtitle);
+        toolbar.setBackgroundColor(statusToColor(state.clientStatus));
+        toolbar.setNavigationIcon(state.backStack.size() > 1 ? R.drawable.ic_back : R.drawable.ic_navigation_bar_logo);
+    }
+
+    @ColorInt
+    private int statusToColor(Client.Status status) {
+        if (status == null) {
+            status = Client.Status.CONNECTED;
+        }
+        switch (status) {
+            case DISCONNECTED:
+                return ContextCompat.getColor(this, R.color.flatui_color_pomegranate);
+            case CONNECTING:
+                return ContextCompat.getColor(this, R.color.flatui_color_alizarin);
+            default:
+                return ContextCompat.getColor(this, R.color.colorPrimary);
+        }
     }
 
     @Override
     public void willReceiveState(MainState state) {
         super.willReceiveState(state);
         int num = state.backStack.size() - (getState() == null ? 0 : getState().backStack.size());
-        TransitionStyle transitionStyle = num == 0 ? TransitionStyle.NONE : (num > 0 ? TransitionStyle.PUSH : TransitionStyle.POP);
+        TransitionStyle transitionStyle = num == 0 ? TransitionStyle.PUSH : (num > 0 ? TransitionStyle.PUSH : TransitionStyle.POP);
         bindComponentToId(state.backStack.peek().component, R.id.container, transitionStyle);
         bindComponentToId(state.popupContainer, R.id.popup, state.popupContainer == null ? TransitionStyle.POPUP_DISMISS : TransitionStyle.POPUP_SHOW);
     }

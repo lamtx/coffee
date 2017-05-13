@@ -2,10 +2,6 @@ package erika.core.redux.immutable;
 
 
 import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
-
-import java.util.Collection;
-import java.util.Iterator;
 
 public class ImmutableStack<T> extends ImmutableArrayList<T> {
     public ImmutableStack() {

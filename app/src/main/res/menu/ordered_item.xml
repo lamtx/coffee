@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Thêm món"
+        android:icon="@drawable/ic_plus"
+        android:id="@+id/action_add"
+        />
+    <item android:title="Bớt món"
+        android:icon="@drawable/ic_plus"
+        android:id="@+id/action_remove"
+        />
+    <item android:title="Xóa món"
+        android:icon="@drawable/ic_plus"
+        android:id="@+id/action_clear"
+        />
+</menu>

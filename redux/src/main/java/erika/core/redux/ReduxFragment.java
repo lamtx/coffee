@@ -2,12 +2,12 @@ package erika.core.redux;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.support.annotation.CallSuper;
 
 public abstract class ReduxFragment<AppState, State> extends Fragment implements Component<AppState, State> {
     private State state;
-
+    private Store<AppState> store;
+    private boolean bound = false;
     @Override
     public State getState() {
         return state;
@@ -18,9 +18,7 @@ public abstract class ReduxFragment<AppState, State> extends Fragment implements
     }
 
     public Store<AppState> getStore() {
-        @SuppressWarnings({"unchecked"})
-        ReduxApplication<AppState> application = (ReduxApplication<AppState>) getActivity().getApplication();
-        return application.getStore();
+        return store;
     }
 
     @Override
@@ -38,6 +36,16 @@ public abstract class ReduxFragment<AppState, State> extends Fragment implements
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        @SuppressWarnings({"unchecked"})
+        ReduxApplication<AppState> reduxActivity = (ReduxApplication) activity.getApplication();
+        store = reduxActivity.getStore();
+        state = getStateFromStore(store.getState());
+        bound = false;
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         getStore().registerStateChangedListener(onStateChangedListener);
@@ -46,14 +54,22 @@ public abstract class ReduxFragment<AppState, State> extends Fragment implements
 
     @Override
     public void onStop() {
-        super.onStop();
         getStore().unregisterStateChangedListener(onStateChangedListener);
+        super.onStop();
+    }
+
+    @Override
+    public void onDetach() {
+        store = null;
+        state = null;
+        super.onDetach();
     }
 
     private void rebindState(AppState newAppState) {
         State oldState = getState();
         State newState = getStateFromStore(newAppState);
-        if (newState != oldState) {
+        if (!bound || newState != oldState) {
+            bound = true;
             willReceiveState(newState);
             setState(newState);
             bindStateToView(newState);

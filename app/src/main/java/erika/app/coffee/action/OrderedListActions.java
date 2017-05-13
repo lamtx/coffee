@@ -4,12 +4,14 @@ import android.content.Context;
 
 import java.util.List;
 
+import erika.app.coffee.R;
 import erika.app.coffee.model.LoadState;
 import erika.app.coffee.model.args.SetIsRefreshingArgs;
 import erika.app.coffee.model.args.SetLoadStateArgs;
 import erika.app.coffee.model.args.SetOrderedMenuListArgs;
 import erika.app.coffee.reducer.OrderedListReducer;
 import erika.app.coffee.service.ServiceInterface;
+import erika.app.coffee.service.communication.MenuItem;
 import erika.app.coffee.service.communication.OrderedMenuItem;
 import erika.core.redux.Action;
 import erika.core.redux.DispatchAction;
@@ -41,5 +43,16 @@ public class OrderedListActions {
 
     public static Action setIsRefreshing(boolean refreshing) {
         return new SetIsRefreshingArgs(OrderedListReducer.class, refreshing);
+    }
+
+    public static DispatchAction clear(Context context, int tableId, int id, MenuItem menuItem) {
+        return dispatcher -> {
+            String message = context.getString(R.string.message_clear_ordered_item, menuItem.name);
+            String title = context.getString(R.string.title_clear_ordered_item);
+            dispatcher.dispatch(MessageBoxActions.ask(message, title, () -> {
+                ServiceInterface.shared(context).editOrderedItem(menuItem, tableId, -10000, id).then(task -> {
+                });
+            }));
+        };
     }
 }

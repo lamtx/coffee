@@ -13,12 +13,9 @@ import erika.app.coffee.reducer.MenuReducer;
 import erika.app.coffee.service.ServiceInterface;
 import erika.app.coffee.service.communication.MenuCategory;
 import erika.app.coffee.service.communication.MenuItem;
-import erika.app.coffee.service.communication.responses.SuccessResponse;
 import erika.core.Vietnamese;
 import erika.core.redux.Action;
 import erika.core.redux.DispatchAction;
-import erika.core.threading.Task;
-import erika.core.threading.TaskCompletion;
 
 public class MenuActions {
 

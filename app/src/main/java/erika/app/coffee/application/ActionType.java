@@ -5,7 +5,10 @@ public class ActionType {
     // Main
     public static final String PUSH = "PUSH";
     public static final String POP = "POP";
+    public static final String SET_ROOT = "SET_ROOT";
     public static final String SET_APP_TITLE = "SET_APP_TITLE";
+    public static final String SIGN_OUT = "SIGN_OUT";
+    public static final String SET_CLIENT_STATUS = "SET_CLIENT_STATUS";
 
     // Popup
     public static final String SHOW_POPUP = "SHOW_POPUP";
@@ -24,6 +27,7 @@ public class ActionType {
 
     // Table List
     public static final String SET_TABLE_LIST_RESULT = "SET_TABLE_LIST_RESULT";
+    public static final String SET_TABLE_STATUS = "SET_TABLE_STATUS";
 
     // Order
     public static final String SET_TABLE_FOR_ORDER_COMPONENT = "SET_TABLE_FOR_ORDER_COMPONENT";

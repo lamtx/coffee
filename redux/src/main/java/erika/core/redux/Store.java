@@ -1,5 +1,6 @@
 package erika.core.redux;
 
+import android.os.Handler;
 import android.support.annotation.MainThread;
 
 import erika.core.redux.utils.LinkedList;
@@ -10,8 +11,11 @@ public class Store<State> implements Dispatcher {
         void onStateChanged(State oldState, State newState);
     }
 
+
     private final Reducer<State> reducer;
     private State state;
+    private State oldState;
+    private final Handler handler = new Handler();
 
     private final LinkedList<OnStateChangedListener<State>> listeners = new LinkedList<>();
 
@@ -22,10 +26,11 @@ public class Store<State> implements Dispatcher {
     @Override
     @MainThread
     public void dispatch(Action action) {
-        State oldState = this.state;
-        this.state = reducer.reduce(this.state, action);
-        if (this.state != oldState) {
-            notifyStateChanged(oldState, state);
+        oldState = state;
+        state = reducer.reduce(state, action);
+        if (state != oldState) {
+            handler.removeCallbacks(notifyStateAction);
+            handler.post(notifyStateAction);
         }
     }
 
@@ -59,4 +64,12 @@ public class Store<State> implements Dispatcher {
             }
         }
     }
+
+    private final Runnable notifyStateAction = new Runnable() {
+        @Override
+        public void run() {
+            notifyStateChanged(oldState, state);
+            oldState = null;
+        }
+    };
 }

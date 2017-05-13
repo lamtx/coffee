@@ -13,7 +13,6 @@
         <item name="textColor">@color/textColor</item>
         <item name="disabledTextColor">@color/disabledTextColor</item>
 
-        <item name="android:actionBarSize">44dp</item>
     </style>
 
     <style name="OuterPopup">
@@ -42,7 +41,9 @@
         <item name="android:textColor">?textColor</item>
         <item name="android:textSize">@dimen/medium_font_size</item>
     </style>
-
+    <style name="Text.Light">
+        <item name="android:textColor">@color/lightTextColor</item>
+    </style>
     <style name="Dim">
         <item name="android:textColor">?secondaryTextColor</item>
         <item name="android:textSize">@dimen/medium_font_size</item>
@@ -76,6 +77,8 @@
         <item name="android:textStyle">bold</item>
         <item name="android:layout_width">86dp</item>
         <item name="android:layout_height">64dp</item>
+        <item name="android:layout_marginTop">@dimen/item_padding</item>
+        <item name="android:layout_marginEnd">@dimen/item_spacing</item>
     </style>
 
     <style name="Button.Action">

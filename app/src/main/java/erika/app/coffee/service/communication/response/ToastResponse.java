@@ -1,4 +1,4 @@
-package erika.app.coffee.service.communication.responses;
+package erika.app.coffee.service.communication.response;
 
 import erika.core.communication.MissingFieldException;
 import erika.core.communication.Parser;

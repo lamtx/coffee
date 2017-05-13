@@ -7,5 +7,5 @@
     android:id="@android:id/empty"
     android:layout_marginTop="@dimen/item_padding"
     android:layout_marginBottom="@dimen/item_padding"
-    android:text="Nothing to show here"
+    android:text="Không có dữ liệu"
 />

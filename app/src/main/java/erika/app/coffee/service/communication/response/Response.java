@@ -1,4 +1,4 @@
-package erika.app.coffee.service.communication.responses;
+package erika.app.coffee.service.communication.response;
 
 import java.util.HashMap;
 import java.util.Map;

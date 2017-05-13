@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:paddingEnd="3dp"
+        android:paddingStart="0dp"
         android:text="This is a long text" />
 
     <TextView

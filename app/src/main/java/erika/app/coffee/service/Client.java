@@ -1,7 +1,6 @@
 package erika.app.coffee.service;
 
 import android.os.Handler;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -13,12 +12,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 import erika.app.coffee.application.Define;
 import erika.app.coffee.model.ClientInfo;
 import erika.app.coffee.model.ResponseHandler;
-import erika.app.coffee.service.communication.requests.Request;
-import erika.app.coffee.service.communication.responses.Response;
+import erika.app.coffee.service.communication.request.Request;
+import erika.app.coffee.service.communication.response.Response;
 import erika.core.communication.MissingFieldException;
 import erika.core.communication.Reader;
 import erika.core.threading.Task;
@@ -27,6 +27,7 @@ import erika.core.threading.TaskCompletionSource;
 public class Client {
 
     public enum ConnectResult {
+        CREDENTIALS_MISSING,
         CANNOT_CONNECT,
         CONNECTION_TIMEOUT,
         INVALID_AUTHENTICATION,
@@ -34,22 +35,7 @@ public class Client {
         OK,
     }
 
-    @IntDef({
-            SocketError.OK,
-            SocketError.NOT_CONNECTED,
-            SocketError.IO_EXCEPTION,
-            SocketError.RESPONSE_TIMEOUT,
-            SocketError.MESSAGE_NOT_MATCH
-    })
-    public @interface SocketError {
-        int OK = 0;
-        int NOT_CONNECTED = -1;
-        int IO_EXCEPTION = -2;
-        int RESPONSE_TIMEOUT = -3;
-        int MESSAGE_NOT_MATCH = -4;
-    }
-
-    public enum ConnectionStatus {
+    public enum Status {
         DISCONNECTED, CONNECTING, CONNECTED,
     }
 
@@ -65,24 +51,14 @@ public class Client {
         }
     }
 
-    public static class SocketErrorException extends RuntimeException {
-
-        @SocketError
-        private final int code;
-
-        public SocketErrorException(@SocketError int code) {
-            this.code = code;
-        }
-
-        @SocketError
-        public int getErrorCode() {
-            return code;
-        }
+    public static class UnableToSendRequestException extends RuntimeException {
     }
 
     private interface UncheckedTaskCompletionSource {
         void setResult(Response response);
+
         void setException(Exception exception);
+
         void setCancellation();
     }
 
@@ -124,47 +100,58 @@ public class Client {
     private BufferedReader reader;
     private BufferedWriter writer;
     private final ResponseHandler responseHandler;
-    private ConnectionStatus status = ConnectionStatus.DISCONNECTED;
+    private Status status = Status.DISCONNECTED;
     private final SparseArray<UncheckedTaskCompletionSource> pendingActions = new SparseArray<>();
     private static int random = 0;
     private final Handler handler = new Handler();
     private int privilegeMask;
-    private ClientInfo currentClient;
+    private ClientInfo credentials;
 
     public Client(ResponseHandler handler) {
         this.responseHandler = handler;
     }
 
-    public Task<ConnectResult> connect(ClientInfo clientInfo) {
+    public void setCredentials(ClientInfo clientInfo) {
+        this.credentials = clientInfo;
+    }
+
+    public Task<ConnectResult> connect() {
+        if (credentials == null) {
+            throw new RuntimeException("Credentials is missing");
+        }
         disconnect();
-        currentClient = clientInfo;
         TaskCompletionSource<ConnectResult> source = new TaskCompletionSource<>();
         new Thread(() -> {
-            status = ConnectionStatus.CONNECTING;
-            final ConnectResult completedStatus = establishConnection(clientInfo);
+            status = Status.CONNECTING;
+            final ConnectResult completedStatus = establishConnection();
             source.setResult(completedStatus);
             if (completedStatus == ConnectResult.OK) {
-                Client.this.status = ConnectionStatus.CONNECTED;
+                Client.this.status = Status.CONNECTED;
                 listen();
             } else {
-                status = ConnectionStatus.DISCONNECTED;
+                status = Status.DISCONNECTED;
             }
         }).start();
         return source.getTask();
     }
 
-    private ConnectResult establishConnection(ClientInfo client) {
+    private ConnectResult establishConnection() {
+        if (credentials == null) {
+            return ConnectResult.CREDENTIALS_MISSING;
+        }
         try {
             socket = new Socket();
-            InetSocketAddress sockAddress = new InetSocketAddress(client.host, client.port);
+            InetSocketAddress sockAddress = new InetSocketAddress(credentials.host, credentials.port);
             socket.connect(sockAddress, Define.CONNECTION_TIMEOUT);
+        } catch (SocketTimeoutException ignored) {
+            return ConnectResult.CONNECTION_TIMEOUT;
         } catch (Exception e) {
             return ConnectResult.CANNOT_CONNECT;
         }
         try {
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-            writer.write(client.userName + " " + client.password);
+            writer.write(credentials.userName + " " + credentials.password);
             writer.newLine();
             writer.flush();
         } catch (Exception e) {
@@ -187,7 +174,6 @@ public class Client {
             if (code >= 0) {
                 privilegeMask = code;
             }
-
             return code < 0 ? ConnectResult.INVALID_AUTHENTICATION : ConnectResult.OK;
         } else {
             return ConnectResult.PARSE_ERROR;
@@ -195,10 +181,10 @@ public class Client {
     }
 
     public void disconnect() {
-        if (status == ConnectionStatus.DISCONNECTED) {
+        if (status == Status.DISCONNECTED) {
             return;
         }
-        status = ConnectionStatus.DISCONNECTED;
+        status = Status.DISCONNECTED;
         clearPendingRequests();
         try {
             writer.close();
@@ -218,7 +204,7 @@ public class Client {
     }
 
     private void clearPendingRequests() {
-        for(int i = 0; i < pendingActions.size(); i++) {
+        for (int i = 0; i < pendingActions.size(); i++) {
             pendingActions.get(pendingActions.keyAt(i)).setCancellation();
         }
         pendingActions.clear();
@@ -250,8 +236,7 @@ public class Client {
         disconnect();
     }
 
-    @SocketError
-    private int sendRawRequest(Request request) {
+    private boolean sendRawRequest(Request request) {
         if (writer != null) {
             try {
                 writer.write(request.toMessage());
@@ -259,13 +244,11 @@ public class Client {
                 writer.flush();
             } catch (IOException e) {
                 disconnect();
-                return SocketError.IO_EXCEPTION;
+                return false;
             }
-        } else {
-            disconnect();
-            return SocketError.NOT_CONNECTED;
+            return true;
         }
-        return SocketError.OK;
+        return false;
     }
 
     private void performResponse(final Response response) {
@@ -291,13 +274,12 @@ public class Client {
     private <T extends Response> void trySendRequest(Request request, @Nullable CheckedTaskCompletionSource<T> taskSource) {
         int sequenceId = taskSource == null ? 0 : ++random;
         request.setSequenceId(sequenceId);
-        int code = sendRawRequest(request);
-        if (code != SocketError.OK) {
-            if (currentClient != null) {
-                reconnect(currentClient, request, taskSource);
+        if (!sendRawRequest(request)) {
+            if (credentials != null) {
+                reconnect(request, taskSource);
             } else {
                 if (taskSource != null) {
-                    taskSource.setException(new SocketErrorException(code));
+                    taskSource.setException(new UnableToSendRequestException());
                 }
             }
             return;
@@ -307,23 +289,23 @@ public class Client {
         }
     }
 
-    private <T extends Response> void reconnect(ClientInfo clientInfo, Request request, @Nullable CheckedTaskCompletionSource<T> taskSource) {
-        responseHandler.statusChanged(ConnectionStatus.DISCONNECTED, ConnectionStatus.CONNECTING);
-        connect(clientInfo).then(task -> {
+    private <T extends Response> void reconnect(Request request, @Nullable CheckedTaskCompletionSource<T> taskSource) {
+        responseHandler.statusChanged(Status.DISCONNECTED, Status.CONNECTING);
+        connect().then(task -> {
             if (task.getResult() == ConnectResult.OK) {
-                responseHandler.statusChanged(ConnectionStatus.CONNECTING, ConnectionStatus.CONNECTING);
+                responseHandler.statusChanged(Status.CONNECTING, Status.CONNECTING);
                 trySendRequest(request, taskSource);
             } else {
                 if (taskSource != null) {
-                    taskSource.setException(new SocketErrorException(SocketError.NOT_CONNECTED));
+                    taskSource.setException(new UnableToSendRequestException());
                 }
-                responseHandler.statusChanged(ConnectionStatus.DISCONNECTED, ConnectionStatus.DISCONNECTED);
+                responseHandler.statusChanged(Status.DISCONNECTED, Status.DISCONNECTED);
             }
         });
     }
 
     public boolean isConnected() {
-        return status == ConnectionStatus.CONNECTED;
+        return status == Status.CONNECTED;
     }
 
     public int getPrivilegeMask() {

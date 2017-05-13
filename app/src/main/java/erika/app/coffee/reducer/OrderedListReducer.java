@@ -3,17 +3,13 @@ package erika.app.coffee.reducer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.List;
-
 import erika.app.coffee.action.OrderedListActions;
 import erika.app.coffee.application.ActionType;
 import erika.app.coffee.model.LoadState;
 import erika.app.coffee.model.args.SetIsRefreshingArgs;
-import erika.app.coffee.model.args.SetLeftPanelWidthArgs;
 import erika.app.coffee.model.args.SetLoadStateArgs;
 import erika.app.coffee.model.args.SetOrderedMenuListArgs;
 import erika.app.coffee.model.args.SetTableForOrderComponentArgs;
-import erika.app.coffee.service.communication.OrderedMenuItem;
 import erika.app.coffee.state.OrderedListState;
 import erika.core.redux.Action;
 import erika.core.redux.Reducer;

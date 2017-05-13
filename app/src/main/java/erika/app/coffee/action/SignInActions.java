@@ -3,13 +3,14 @@ package erika.app.coffee.action;
 import android.content.Context;
 import android.text.TextUtils;
 
-import erika.app.coffee.application.Define;
 import erika.app.coffee.component.TableListFragment;
+import erika.app.coffee.model.ClientInfo;
 import erika.app.coffee.model.args.SetHostArgs;
 import erika.app.coffee.model.args.SetPasswordArgs;
 import erika.app.coffee.model.args.SetUserNameArgs;
 import erika.app.coffee.service.Client;
 import erika.app.coffee.service.ServiceInterface;
+import erika.app.coffee.service.Settings;
 import erika.core.redux.Action;
 import erika.core.redux.DispatchAction;
 
@@ -31,28 +32,24 @@ public class SignInActions {
                 dispatcher.dispatch(MessageBoxActions.show("Host bị thiếu", "Đăng nhập"));
                 return;
             }
-            String realHost;
-            int port;
-            int index = host.indexOf(':');
-            if (index == -1) {
-                realHost = host;
-                port = Define.PORT;
-            } else {
-                realHost = host.substring(0, index);
-                String portAsString = host.substring(index + 1);
-                try {
-                    port = Integer.parseInt(portAsString);
-                } catch (NumberFormatException ignored) {
-                    dispatcher.dispatch(MessageBoxActions.show("Host bị sai", "Đăng nhập"));
-                    return;
-                }
+
+            ClientInfo clientInfo;
+            try {
+                clientInfo = new ClientInfo(userName, password, host);
+            } catch (IllegalArgumentException ignored) {
+                dispatcher.dispatch(MessageBoxActions.show("Host bị sai", "Đăng nhập"));
+                return;
             }
+
             ServiceInterface serviceInterface = ServiceInterface.shared(context);
+            serviceInterface.setCredentials(clientInfo);
+
             dispatcher.dispatch(LoadingDialogAction.show("Sign in..."));
-            serviceInterface.signIn(userName, password, realHost, port).then(task -> {
+            serviceInterface.connect().then(task -> {
                 dispatcher.dispatch(LoadingDialogAction.dismiss());
                 if (task.getResult() == Client.ConnectResult.OK) {
-                    dispatcher.dispatch(MainActions.push(TableListFragment.class, "Bàn"));
+                    Settings.shared(context).setHost(host).setPassword(password).setUserName(userName);
+                    dispatcher.dispatch(MainActions.setRoot(TableListFragment.class, "Bàn"));
                 } else {
                     dispatcher.dispatch(MessageBoxActions.show("Error: " + task.getResult(), "Đăng nhập"));
                 }

@@ -4,13 +4,13 @@ import android.content.Context;
 
 import java.util.List;
 
-import erika.app.coffee.R;
-import erika.app.coffee.component.MessageBox;
 import erika.app.coffee.component.OrderFragment;
 import erika.app.coffee.model.LoadState;
+import erika.app.coffee.model.TableStatus;
 import erika.app.coffee.model.args.SetIsRefreshingArgs;
 import erika.app.coffee.model.args.SetLoadStateArgs;
 import erika.app.coffee.model.args.SetTableListResultArgs;
+import erika.app.coffee.model.args.SetTableStatus;
 import erika.app.coffee.reducer.TableListReducer;
 import erika.app.coffee.service.ServiceInterface;
 import erika.app.coffee.service.communication.Table;
@@ -35,14 +35,13 @@ public class TableListActions {
 
     public static DispatchAction serveTable(Context context, Table table) {
         return dispatcher -> {
-            DispatchAction action = new MessageBoxActions.Builder()
-                    .message("Bạn có muốn phục vụ bàn " + table.name + "?")
-                    .title("Bàn chưa phục vụ")
-                    .negative(R.string.no, null)
-                    .positive(R.string.yes, () -> {
+            dispatcher.dispatch(MessageBoxActions.ask(
+                    "Bạn có muốn phục vụ bàn " + table.name + "?",
+                    "Bàn chưa phục vụ",
+                    () -> {
                         dispatcher.dispatch(serveTableAfterConfirm(context, table));
-                    }).build();
-            dispatcher.dispatch(action);
+                    }
+            ));
         };
     }
 
@@ -52,6 +51,7 @@ public class TableListActions {
                 if (task.isCompleted()) {
                     if (task.getResult().isSuccessful()) {
                         dispatcher.dispatch(OrderActions.setTable(table, true));
+                        dispatcher.dispatch(setTableStatus(table.id, TableStatus.BUSY));
                         dispatcher.dispatch(MainActions.push(OrderFragment.class, table.name));
                     } else {
                         dispatcher.dispatch(MessageBoxActions.show(task.getResult().message));
@@ -71,5 +71,9 @@ public class TableListActions {
 
     public static Action setIsRefreshing(boolean refreshing) {
         return new SetIsRefreshingArgs(TableListReducer.class, refreshing);
+    }
+
+    public static Action setTableStatus(int tableId, TableStatus status) {
+        return new SetTableStatus(tableId, status);
     }
 }

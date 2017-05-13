@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import erika.app.coffee.model.TableStatus;
@@ -13,11 +12,11 @@ import erika.app.coffee.service.communication.MenuCategory;
 import erika.app.coffee.service.communication.MenuItem;
 import erika.app.coffee.service.communication.OrderedMenuItem;
 import erika.app.coffee.service.communication.Table;
-import erika.app.coffee.service.communication.responses.ListOfOrderedMenuResponse;
-import erika.app.coffee.service.communication.responses.ListOfTableResponse;
-import erika.app.coffee.service.communication.responses.MenuResponse;
-import erika.app.coffee.service.communication.responses.ServeTableResponse;
-import erika.app.coffee.service.communication.responses.SuccessResponse;
+import erika.app.coffee.service.communication.response.ListOfOrderedMenuResponse;
+import erika.app.coffee.service.communication.response.ListOfTableResponse;
+import erika.app.coffee.service.communication.response.MenuResponse;
+import erika.app.coffee.service.communication.response.ServeTableResponse;
+import erika.app.coffee.service.communication.response.SuccessResponse;
 import erika.core.threading.Task;
 import erika.core.threading.TaskFactory;
 

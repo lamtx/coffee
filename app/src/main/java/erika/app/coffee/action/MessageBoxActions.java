@@ -1,7 +1,9 @@
 package erika.app.coffee.action;
 
+import android.content.DialogInterface;
 import android.support.annotation.StringRes;
 
+import erika.app.coffee.R;
 import erika.app.coffee.component.MessageBox;
 import erika.app.coffee.model.args.SetMessageBoxArgs;
 import erika.app.coffee.model.args.ShowPopupArgs;
@@ -68,6 +70,11 @@ public class MessageBoxActions {
             return this;
         }
 
+        public Builder defaultButton(int buttonId) {
+            state.defaultButton = buttonId;
+            return this;
+        }
+
         public DispatchAction build() {
             return dispatcher -> {
                 dispatcher.dispatch(new SetMessageBoxArgs(state));
@@ -86,7 +93,24 @@ public class MessageBoxActions {
 
     public static DispatchAction show(String message, String title, MessageBoxState.Action okAction) {
         return dispatcher -> {
-            DispatchAction action = new Builder().message(message).title(title).positive(android.R.string.ok, okAction).build();
+            DispatchAction action = new Builder()
+                    .message(message)
+                    .title(title)
+                    .positive(android.R.string.ok, okAction)
+                    .defaultButton(DialogInterface.BUTTON_POSITIVE)
+                    .build();
+            dispatcher.dispatch(action);
+        };
+    }
+
+    public static DispatchAction ask(String message, String title, MessageBoxState.Action yesAction) {
+        return dispatcher -> {
+            DispatchAction action = new Builder()
+                    .message(message)
+                    .title(title)
+                    .positive(R.string.yes, yesAction)
+                    .negative(R.string.no, null)
+                    .build();
             dispatcher.dispatch(action);
         };
     }

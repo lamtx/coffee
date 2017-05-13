@@ -9,6 +9,7 @@ import erika.app.coffee.model.LoadState;
 import erika.app.coffee.model.args.SetIsRefreshingArgs;
 import erika.app.coffee.model.args.SetLoadStateArgs;
 import erika.app.coffee.model.args.SetTableListResultArgs;
+import erika.app.coffee.model.args.SetTableStatus;
 import erika.app.coffee.state.TableListState;
 import erika.core.redux.Action;
 import erika.core.redux.Reducer;
@@ -28,6 +29,8 @@ public class TableListReducer implements Reducer<TableListState> {
                 return setIsRefreshing(state, (SetIsRefreshingArgs) action);
             case ActionType.SET_LOAD_STATE:
                 return setLoadState(state, (SetLoadStateArgs) action);
+            case ActionType.SET_TABLE_STATUS:
+                return setTableStatus(state, (SetTableStatus) action);
             default:
                 return state;
         }
@@ -56,6 +59,20 @@ public class TableListReducer implements Reducer<TableListState> {
             x.items = action.items;
             x.loadState = LoadState.NONE;
             x.refreshing = false;
+        });
+    }
+
+
+    private TableListState setTableStatus(TableListState state, SetTableStatus action) {
+        return Redux.copy(state, x-> {
+            x.items = Redux.map(x.items, item -> {
+               if (item.id == action.tableId) {
+                   return Redux.copy(item, i -> {
+                       i.status = action.status;
+                   });
+               }
+               return item;
+            });
         });
     }
 }

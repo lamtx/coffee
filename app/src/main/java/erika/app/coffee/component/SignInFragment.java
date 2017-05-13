@@ -2,7 +2,6 @@ package erika.app.coffee.component;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,11 @@ import erika.app.coffee.state.SignInState;
 import erika.core.redux.binding.DefaultTextWatcher;
 
 public class SignInFragment extends BaseFragment<SignInState> {
+
+    private EditText textUserName;
+    private EditText textPassword;
+    private EditText textHost;
+
     @Override
     public SignInState getStateFromStore(AppState appState) {
         return appState.signIn;
@@ -28,28 +32,41 @@ public class SignInFragment extends BaseFragment<SignInState> {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
+        textUserName = (EditText) view.findViewById(R.id.editTextUsername);
+        textPassword = (EditText) view.findViewById(R.id.editTextPassword);
+        textHost = (EditText) view.findViewById(R.id.editTextAddress);
         view.findViewById(R.id.buttonLogin).setOnClickListener(v -> {
             SignInState state = getState();
             dispatch(SignInActions.signIn(getActivity(), state.userName, state.password, state.host));
         });
-        ((EditText) view.findViewById(R.id.editTextUsername)).addTextChangedListener(new DefaultTextWatcher() {
+        textUserName.addTextChangedListener(new DefaultTextWatcher() {
+
             @Override
-            public void afterTextChanged(Editable s) {
-                dispatch(new SetUserNameArgs(s.toString()));
+            protected void onTextChanged(String value) {
+                dispatch(new SetUserNameArgs(value));
             }
         });
-        ((EditText) view.findViewById(R.id.editTextPassword)).addTextChangedListener(new DefaultTextWatcher() {
+        textPassword.addTextChangedListener(new DefaultTextWatcher() {
+
             @Override
-            public void afterTextChanged(Editable s) {
-                dispatch(new SetPasswordArgs(s.toString()));
+            protected void onTextChanged(String value) {
+                dispatch(new SetPasswordArgs(value));
             }
         });
-        ((EditText) view.findViewById(R.id.editTextAddress)).addTextChangedListener(new DefaultTextWatcher() {
+        textHost.addTextChangedListener(new DefaultTextWatcher() {
             @Override
-            public void afterTextChanged(Editable s) {
-                dispatch(new SetHostArgs(s.toString()));
+            protected void onTextChanged(String value) {
+                dispatch(new SetHostArgs(value));
             }
         });
         return view;
+    }
+
+    @Override
+    public void bindStateToView(SignInState state) {
+        super.bindStateToView(state);
+        textUserName.setText(state.userName);
+        textPassword.setText(state.password);
+        textHost.setText(state.host);
     }
 }

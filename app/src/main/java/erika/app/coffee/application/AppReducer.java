@@ -3,17 +3,16 @@ package erika.app.coffee.application;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import erika.app.coffee.reducer.MenuReducer;
-import erika.app.coffee.reducer.MessageListReducer;
-import erika.app.coffee.reducer.NumberReducer;
-import erika.app.coffee.reducer.OrderedListReducer;
-import erika.app.coffee.reducer.TableListReducer;
 import erika.app.coffee.reducer.LoadingDialogReducer;
 import erika.app.coffee.reducer.MainReducer;
+import erika.app.coffee.reducer.MenuReducer;
 import erika.app.coffee.reducer.MessageBoxReducer;
+import erika.app.coffee.reducer.MessageListReducer;
+import erika.app.coffee.reducer.NumberReducer;
 import erika.app.coffee.reducer.OrderReducer;
+import erika.app.coffee.reducer.OrderedListReducer;
 import erika.app.coffee.reducer.SignInReducer;
-import erika.app.coffee.state.MessageListState;
+import erika.app.coffee.reducer.TableListReducer;
 import erika.core.redux.Action;
 import erika.core.redux.Reducer;
 
@@ -32,7 +31,8 @@ public class AppReducer implements Reducer<AppState> {
     @NonNull
     @Override
     public AppState reduce(@Nullable AppState state, Action action) {
-        if (state == null) {
+        if (state == null || ActionType.SIGN_OUT.equals(action.getType())) {
+            // Reset state
             state = new AppState();
         }
         AppState appState = new AppState();
