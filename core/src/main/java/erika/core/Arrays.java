@@ -120,6 +120,20 @@ public class Arrays {
         return -1;
     }
 
+    public static <T> int indexOf(Iterable<T> source, Predicate<T> where) {
+        if (source == null) {
+            return -1;
+        }
+        int i = 0;
+        for (T t : source) {
+            if (where.test(t)) {
+                return i;
+            }
+            i += 1;
+        }
+        return -1;
+    }
+
     public static <T> int indexOf(T[] source, T value) {
         if (source == null || value == null) {
             return -1;

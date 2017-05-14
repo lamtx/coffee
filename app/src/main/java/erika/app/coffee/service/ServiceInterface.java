@@ -82,7 +82,6 @@ public class ServiceInterface {
 
     public Task<ServeTableResponse> serveTable(int tableId) {
         if (MOCK) {
-            client.sendRequest(new MenuRequest());
             return Mock.serveTable(tableId);
         }
         return client.sendRequest(new ServeTableRequest(tableId), ServeTableResponse.class);

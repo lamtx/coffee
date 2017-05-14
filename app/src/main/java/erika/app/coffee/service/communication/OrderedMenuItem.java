@@ -6,7 +6,7 @@ import erika.core.communication.MissingFieldException;
 import erika.core.communication.ObjectReader;
 import erika.core.communication.Reader;
 
-public class OrderedMenuItem {
+public class OrderedMenuItem implements Cloneable {
     public MenuItem menuItem;
     public double quantity;
     public int id;

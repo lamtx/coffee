@@ -3,4 +3,5 @@
     <string name="key_user_name">user-name</string>
     <string name="key_password">password</string>
     <string name="key_host">host</string>
+    <string name="key_left_panel_width">left-panel-width</string>
 </resources>

@@ -2,30 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?selectableItemBackground"
-    android:paddingTop="@dimen/half_item_spacing"
-    android:paddingBottom="@dimen/half_item_spacing"
+    android:background="@drawable/selectable_third_window_color"
     android:paddingEnd="0dp"
+    android:paddingBottom="@dimen/half_item_spacing"
+    android:paddingTop="@dimen/half_item_spacing"
     android:paddingStart="@dimen/item_padding">
-
-    <TextView
-        android:id="@+id/textName"
-        style="@style/Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:paddingEnd="3dp"
-        android:paddingStart="0dp"
-        android:text="This is a long text" />
-
-    <TextView
-        android:id="@+id/textDescription"
-        style="@style/Dim.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/textName"
-        android:text="description" />
 
     <ImageButton
         android:id="@+id/buttonAdd"
@@ -36,5 +17,30 @@
         android:background="?selectableItemBackground"
         android:padding="@dimen/item_padding"
         android:src="@drawable/ic_plus" />
+
+    <LinearLayout
+        android:layout_toStartOf="@id/buttonAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textName"
+            style="@style/Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:lines="1" />
+
+        <TextView
+            android:id="@+id/textDescription"
+            style="@style/Dim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:lines="1" />
+    </LinearLayout>
+
 
 </RelativeLayout>

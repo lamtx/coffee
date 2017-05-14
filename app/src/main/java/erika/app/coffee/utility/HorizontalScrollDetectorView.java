@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
@@ -75,7 +76,7 @@ public class HorizontalScrollDetectorView extends FrameLayout {
                 float distanceY = event.getY() - y;
                 x = event.getX();
                 y = event.getY();
-                if (!scrollInitialized && Math.abs(distanceX) < Math.abs(distanceY)) {
+                if (!scrollInitialized && (Math.abs(distanceX) < Math.abs(distanceY) * 1.5 || Math.abs(distanceX) < 3)) {
                     return false;
                 }
                 swiping = true;

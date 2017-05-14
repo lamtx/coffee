@@ -10,6 +10,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import erika.app.coffee.action.MainActions;
 import erika.app.coffee.action.PopupActions;
 import erika.app.coffee.application.AppState;
@@ -22,7 +25,7 @@ import erika.app.coffee.utility.LayoutInflaterWrapper;
 public class MainActivity extends BaseActivity<MainState> {
     private final LayoutInflaterWrapper layoutInflater = new LayoutInflaterWrapper(this);
     private Toolbar toolbar;
-
+    private static final Map<Class, Fragment.SavedState> states = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,18 +96,25 @@ public class MainActivity extends BaseActivity<MainState> {
         super.willReceiveState(state);
         int num = state.backStack.size() - (getState() == null ? 0 : getState().backStack.size());
         TransitionStyle transitionStyle = num == 0 ? TransitionStyle.PUSH : (num > 0 ? TransitionStyle.PUSH : TransitionStyle.POP);
-        bindComponentToId(state.backStack.peek().component, R.id.container, transitionStyle);
-        bindComponentToId(state.popupContainer, R.id.popup, state.popupContainer == null ? TransitionStyle.POPUP_DISMISS : TransitionStyle.POPUP_SHOW);
+        bindComponentToId(state.backStack.peek().component, R.id.container, transitionStyle, true);
+        bindComponentToId(state.popupContainer, R.id.popup, state.popupContainer == null ? TransitionStyle.POPUP_DISMISS : TransitionStyle.POPUP_SHOW, false);
     }
 
-    private void bindComponentToId(Class<? extends Fragment> component, @IdRes int id, TransitionStyle transitionStyle) {
+    private void bindComponentToId(Class<? extends Fragment> component, @IdRes int id, TransitionStyle transitionStyle, boolean shouldRestoreState) {
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(id);
+
         if (component == null) {
             if (fragment != null) {
+                if (shouldRestoreState) {
+                    states.put(fragment.getClass(), fm.saveFragmentInstanceState(fragment));
+                }
                 fm.beginTransaction().remove(fragment).commit();
             }
         } else if (fragment == null || fragment.getClass() != component) {
+            if (shouldRestoreState && fragment != null) {
+                states.put(fragment.getClass(), fm.saveFragmentInstanceState(fragment));
+            }
             Fragment instance;
             try {
                 instance = component.newInstance();
@@ -125,6 +135,12 @@ public class MainActivity extends BaseActivity<MainState> {
                 case POPUP_DISMISS:
                     fragmentTransaction.setCustomAnimations(0, R.animator.popup_dismiss);
                     break;
+            }
+            if (shouldRestoreState) {
+                Fragment.SavedState savedState = states.get(instance.getClass());
+                if (savedState != null) {
+                    instance.setInitialSavedState(savedState);
+                }
             }
             fragmentTransaction.replace(id, instance, null).commit();
         }

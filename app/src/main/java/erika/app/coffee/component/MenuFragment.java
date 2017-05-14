@@ -2,6 +2,7 @@ package erika.app.coffee.component;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -145,8 +146,10 @@ public class MenuFragment extends BaseFragment<MenuState> {
         @Override
         public void bind() {
             MenuItem item = getItem();
+            //int color = getLayoutPosition() % 2 == 0 ? R.color.thirdWindowColor : R.color.fourthWindowColor;
             textName.setText(item.name);
             textDescription.setText(Utils.stringFrom(item.price));
+           // itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), color));
         }
     }
 

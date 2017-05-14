@@ -39,6 +39,7 @@ public class ActionType {
 
     // Ordered
     public static final String SET_ORDERED_MENU_LIST = "SET_ORDERED_MENU_LIST";
+    public static final String ADD_ORDERED_ITEM = "ADD_ORDERED_ITEM";
 
     // Number
     public static final String SET_NUMBER_VALUE = "SET_NUMBER_VALUE";

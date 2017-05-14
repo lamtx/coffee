@@ -12,7 +12,7 @@ import erika.core.redux.DispatchAction;
 
 public class NumberActions {
 
-    public static DispatchAction addValue(String current, char tag) {
+    public static DispatchAction addValue(String current, char tag, NumberState.Action action) {
         return dispatcher -> {
             int value;
             if (tag == '+') {
@@ -21,6 +21,12 @@ public class NumberActions {
                 value = Integer.parseInt(String.valueOf(tag));
             }
             dispatcher.dispatch(setNumberValue(String.valueOf(Integer.parseInt(current) + value)));
+            if (tag != '+') {
+                if (action != null) {
+                    action.apply(value);
+                }
+                dispatcher.dispatch(PopupActions.dismiss());
+            }
         };
     }
 

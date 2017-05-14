@@ -19,7 +19,7 @@ public class Settings {
     private final String keyUserName;
     private final String keyPassword;
     private final String keyHost;
-
+    private final String keyLeftPanelWidth;
     private final SharedPreferences prefs;
 
     private Settings(Context context) {
@@ -27,6 +27,7 @@ public class Settings {
         keyUserName = context.getString(R.string.key_user_name);
         keyPassword = context.getString(R.string.key_password);
         keyHost = context.getString(R.string.key_host);
+        keyLeftPanelWidth = context.getString(R.string.key_left_panel_width);
     }
 
     public String getUserName() {
@@ -53,6 +54,15 @@ public class Settings {
 
     public Settings setHost(String host) {
         prefs.edit().putString(keyHost, host).apply();
+        return this;
+    }
+
+    public float getLeftPanelWidth() {
+        return prefs.getFloat(keyLeftPanelWidth, 0.2f);
+    }
+
+    public Settings setLeftPanelWidth(float width) {
+        prefs.edit().putFloat(keyLeftPanelWidth, width).apply();
         return this;
     }
 }

@@ -10,6 +10,7 @@ import erika.app.coffee.model.args.SetMenuCategoryKeywordArgs;
 import erika.app.coffee.model.args.SetMenuCategoryListArgs;
 import erika.app.coffee.model.args.SetTableForOrderComponentArgs;
 import erika.app.coffee.service.ServiceInterface;
+import erika.app.coffee.service.Settings;
 import erika.app.coffee.service.communication.MenuCategory;
 import erika.app.coffee.service.communication.Table;
 import erika.core.redux.Action;
@@ -28,8 +29,11 @@ public class OrderActions {
         return new SetMenuCategoryKeywordArgs(keyword);
     }
 
-    public static Action setLeftPanelWidth(float distance) {
-        return new SetLeftPanelWidthArgs(distance);
+    public static DispatchAction setLeftPanelWidth(Context context, float distance) {
+        return dispatcher -> {
+            Settings.shared(context).setLeftPanelWidth(distance);
+            dispatcher.dispatch(new SetLeftPanelWidthArgs(distance));
+        };
     }
 
     public static DispatchAction cancelService(Context context, int tableId, String tableName) {

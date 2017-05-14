@@ -72,13 +72,7 @@ public class NumberFragment extends BaseFragment<NumberState> {
 
     private void handleNumberButtonClick(char tag) {
         if (getState().mode == InputNumberMode.INTEGER) {
-            dispatch(NumberActions.addValue(getState().value, tag));
-            if (tag != '+') {
-                if (getState().action != null) {
-                    getState().action.apply(Double.parseDouble(getState().value));
-                }
-                dispatch(PopupActions.dismiss());
-            }
+            dispatch(NumberActions.addValue(getState().value, tag, getState().action));
         } else {
             dispatch(NumberActions.appendChar(getState().value, tag));
         }

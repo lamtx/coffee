@@ -1,10 +1,13 @@
 package erika.app.coffee.action;
 
+import android.os.Handler;
+
 import erika.app.coffee.model.Message;
 import erika.app.coffee.model.args.AddMessageArgs;
 import erika.app.coffee.model.args.ChangeMessageStatusArgs;
 import erika.app.coffee.model.args.RemoveMessageArgs;
 import erika.core.redux.Action;
+import erika.core.redux.DispatchAction;
 
 public class MessageActions {
     private static int messageId;
@@ -21,7 +24,14 @@ public class MessageActions {
         return new RemoveMessageArgs(messageId);
     }
 
-    public static Action changeMessageStatus(int messageId, Message.Status status) {
-        return new ChangeMessageStatusArgs(messageId, status);
+    public static DispatchAction changeMessageStatus(int messageId, Message.Status status) {
+        return dispatcher -> {
+            switch (status) {
+                case FINISHED:
+                    dispatcher.dispatchDelayed(removeMessage(messageId), 3000);
+                    break;
+            }
+            dispatcher.dispatch(new ChangeMessageStatusArgs(messageId, status));
+        };
     }
 }

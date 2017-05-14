@@ -12,6 +12,7 @@
             android:id="@+id/leftPanel"
             android:layout_width="120dp"
             android:layout_height="match_parent"
+            android:background="@color/thirdWindowColor"
             android:minWidth="20dp">
 
             <fragment
@@ -22,11 +23,12 @@
         </FrameLayout>
 
         <FrameLayout
-            android:elevation="4dp"
             android:id="@+id/rightPanel"
+            android:background="?secondaryWindowColor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toEndOf="@id/leftPanel">
+            android:layout_toEndOf="@id/leftPanel"
+            android:elevation="4dp">
 
             <fragment
                 android:id="@+id/fragmentOrderedMenu"

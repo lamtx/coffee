@@ -4,7 +4,10 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/half_item_spacing"
     android:background="@drawable/button"
-    android:padding="@dimen/item_padding">
+    android:paddingTop="@dimen/item_padding"
+    android:paddingStart="@dimen/item_padding"
+    android:paddingEnd="0dp"
+    android:paddingBottom="@dimen/item_padding">
 
     <LinearLayout
         android:layout_width="0dp"

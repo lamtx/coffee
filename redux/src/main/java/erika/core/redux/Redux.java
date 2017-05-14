@@ -61,6 +61,17 @@ public class Redux {
     }
 
     @CheckResult
+    public static <T> List<T> set(List<T> source, int index, T value) {
+        if (source == null) {
+            return null;
+        }
+        List<T> result = new ArrayList<>(source);
+        result.set(index, value);
+        return result;
+    }
+
+
+    @CheckResult
     public static <T> List<T> remove(List<T> source, Predicate<T> where) {
         if (source == null) {
             return null;
@@ -68,6 +79,21 @@ public class Redux {
         List<T> result = new ArrayList<>(source.size());
         for (T t : source) {
             if (!where.test(t)) {
+                result.add(t);
+            }
+        }
+        return result;
+    }
+
+    @CheckResult
+    public static <T> List<T> remove(List<T> source, int index) {
+        if (source == null) {
+            return null;
+        }
+        List<T> result = new ArrayList<>(source.size() - 1);
+        int i = 0;
+        for (T t : source) {
+            if ((i++) != index) {
                 result.add(t);
             }
         }

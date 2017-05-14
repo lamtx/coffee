@@ -80,7 +80,6 @@ public abstract class ExpandableDataSource<ParentType, ChildType>  extends BaseE
             viewBinder = ((ViewBinder<ParentType>) convertView.getTag());
         }
         viewBinder.setItem(getGroup(groupPosition));
-       // viewBinder.setPosition(groupPosition);
         viewBinder.bind();
         return viewBinder.itemView;
     }

@@ -6,11 +6,47 @@ import android.support.annotation.MainThread;
 import erika.core.redux.utils.LinkedList;
 import erika.core.redux.utils.LinkedListNode;
 
-public class Store<State> implements Dispatcher {
+public class Store<State> {
     interface OnStateChangedListener<State> {
         void onStateChanged(State oldState, State newState);
     }
 
+    private final Dispatcher dispatcher = new Dispatcher() {
+        @Override
+        public void dispatch(Action action) {
+            Store.this.dispatch(action);
+        }
+
+        @Override
+        public void dispatch(DispatchAction action) {
+            Store.this.dispatch(action);
+        }
+
+        @Override
+        public Handler getHandler() {
+            return handler;
+        }
+
+        @Override
+        public void dispatchDelayed(final Action action, long milliseconds) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Store.this.dispatch(action);
+                }
+            }, milliseconds);
+        }
+
+        @Override
+        public void dispatchDelayed(final DispatchAction action, long milliseconds) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Store.this.dispatch(action);
+                }
+            }, milliseconds);
+        }
+    };
 
     private final Reducer<State> reducer;
     private State state;
@@ -23,7 +59,6 @@ public class Store<State> implements Dispatcher {
         this.reducer = reducer;
     }
 
-    @Override
     @MainThread
     public void dispatch(Action action) {
         oldState = state;
@@ -34,10 +69,9 @@ public class Store<State> implements Dispatcher {
         }
     }
 
-    @Override
     @MainThread
     public void dispatch(DispatchAction action) {
-        action.onDispatch(this);
+        action.onDispatch(dispatcher);
     }
 
     private void notifyStateChanged(State oldState, State newState) {

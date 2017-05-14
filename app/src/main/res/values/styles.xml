@@ -60,6 +60,9 @@
     <style name="Dim.Small">
         <item name="android:textSize">@dimen/small_font_size</item>
     </style>
+    <style name="Dim.Light.Small">
+        <item name="android:textSize">@dimen/small_font_size</item>
+    </style>
 
     <style name="Text.Small.Dim">
         <item name="android:textColor">?secondaryTextColor</item>
@@ -73,17 +76,15 @@
     </style>
 
     <style name="Button.Number">
-        <item name="android:textSize">@dimen/medium_font_size</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/number_button</item>
+        <item name="android:textSize">@dimen/large_font_size</item>
         <item name="android:layout_width">86dp</item>
         <item name="android:layout_height">64dp</item>
-        <item name="android:layout_marginTop">@dimen/item_padding</item>
-        <item name="android:layout_marginEnd">@dimen/item_spacing</item>
     </style>
 
     <style name="Button.Action">
         <item name="android:background">?selectableItemBackground</item>
-        <item name="android:textColor">?colorPrimary</item>
+        <item name="android:textColor">?colorAccent</item>
     </style>
 
     <style name="Button.Action.Unfocused">

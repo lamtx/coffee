@@ -40,6 +40,7 @@ public class MenuActions {
             ServiceInterface.shared(context).orderItem(item, tableId, quantity).then(task -> {
                 if (task.isCompleted() && task.getResult().successful) {
                     dispatcher.dispatch(MessageActions.changeMessageStatus(messageId, Message.Status.FINISHED));
+                    dispatcher.dispatch(OrderedListActions.addItem(tableId, item, quantity, 0));
                     dispatcher.dispatch(OrderedListActions.fetchItems(context, tableId));
                 } else {
                     dispatcher.dispatch(MessageActions.changeMessageStatus(messageId, Message.Status.FAILED));

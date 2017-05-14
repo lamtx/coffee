@@ -7,15 +7,14 @@
         android:id="@+id/textSearch"
         style="@style/EditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?listPreferredItemHeight"
         android:drawableStart="@drawable/ic_search"
         android:hint="Find item" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/textSearch"
-        android:orientation="vertical">
+        android:layout_below="@id/textSearch">
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refresher"
@@ -23,10 +22,11 @@
             android:layout_height="match_parent">
 
             <ExpandableListView
+                android:background="@color/dividerColor"
                 android:id="@android:id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:childDivider="@color/disabledTextColor"
+                android:childDivider="@color/colorAccent"
                 android:dividerHeight="1dp" />
 
         </android.support.v4.widget.SwipeRefreshLayout>

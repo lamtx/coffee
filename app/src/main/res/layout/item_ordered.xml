@@ -4,9 +4,17 @@
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
     android:paddingBottom="@dimen/half_item_spacing"
-    android:paddingEnd="0dp"
-    android:paddingStart="@dimen/item_padding"
+    android:paddingEnd="@dimen/item_spacing"
+    android:paddingStart="@dimen/item_spacing"
     android:paddingTop="@dimen/half_item_spacing">
+
+    <TextView
+        android:id="@+id/textTotal"
+        style="@style/Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/textName"
@@ -14,24 +22,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:paddingEnd="3dp"
-        android:paddingStart="0dp"
-        android:text="This is a long text" />
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/textTotal" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/textName">
+        android:layout_below="@id/textName"
+        android:layout_toStartOf="@id/textTotal">
 
         <TextView
             android:id="@+id/textPrice"
-            style="@style/Dim.Small"
+            style="@style/Dim"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="description" />
+            android:layout_height="wrap_content" />
 
         <TextView
+            style="@style/Dim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/horizontal_text_spacing"
@@ -40,9 +48,8 @@
 
         <TextView
             android:id="@+id/textQuantity"
-            style="@style/Dim.Small"
+            style="@style/Dim"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="description" />
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </RelativeLayout>

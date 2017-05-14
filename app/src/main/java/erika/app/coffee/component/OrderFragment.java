@@ -29,17 +29,19 @@ public class OrderFragment extends BaseFragment<OrderState> {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_order, container, false);
+        final View view = inflater.inflate(R.layout.fragment_order, container, false);
         leftPanel = view.findViewById(R.id.leftPanel);
         ((HorizontalScrollDetectorView) view).setOnScrollListener(new HorizontalScrollDetectorView.OnScrollListener() {
             @Override
             public void onScroll(float distanceX) {
-                dispatch(OrderActions.setLeftPanelWidth(getState().leftPanelWidth + distanceX));
+                int total = view.getWidth();
+                float percent = getState().leftPanelWidth;
+                dispatch(OrderActions.setLeftPanelWidth(getActivity(), (total * percent + distanceX) / total));
             }
 
             @Override
             public boolean onAcceptTouch(float x, float y) {
-                return x > getState().leftPanelWidth;
+                return x > leftPanel.getWidth();
             }
         });
         setHasOptionsMenu(true);
@@ -73,9 +75,10 @@ public class OrderFragment extends BaseFragment<OrderState> {
     @Override
     public void bindStateToView(OrderState state) {
         super.bindStateToView(state);
-        if (leftPanel.getWidth() != state.leftPanelWidth) {
+        int width = (int) (state.leftPanelWidth * getView().getWidth());
+        if (leftPanel.getWidth() != width) {
             ViewGroup.LayoutParams layoutParams = leftPanel.getLayoutParams();
-            layoutParams.width = Math.max((int) state.leftPanelWidth, leftPanel.getMinimumWidth());
+            layoutParams.width = Math.max(width, leftPanel.getMinimumWidth());
             leftPanel.setLayoutParams(layoutParams);
         }
     }

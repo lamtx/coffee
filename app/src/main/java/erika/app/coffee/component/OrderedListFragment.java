@@ -53,12 +53,14 @@ public class OrderedListFragment extends BaseListFragment<OrderedListState, Orde
         private final TextView textName;
         private final TextView textPrice;
         private final TextView textQuantity;
+        private final TextView textTotal;
 
         ItemBinder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.item_ordered, parent, false));
             textName = (TextView) itemView.findViewById(R.id.textName);
             textPrice = (TextView) itemView.findViewById(R.id.textPrice);
             textQuantity = (TextView) itemView.findViewById(R.id.textQuantity);
+            textTotal = (TextView) itemView.findViewById(R.id.textTotal);
             itemView.setOnClickListener(v -> {
                 showMenu(v, getItem());
             });
@@ -70,6 +72,7 @@ public class OrderedListFragment extends BaseListFragment<OrderedListState, Orde
             textName.setText(item.menuItem.name);
             textPrice.setText(Utils.stringFrom(item.menuItem.price));
             textQuantity.setText(Utils.stringFrom(item.quantity));
+            textTotal.setText(Utils.stringFrom(item.quantity * item.menuItem.price));
         }
     }
     private void showMenu(View v, final OrderedMenuItem menuItem) {

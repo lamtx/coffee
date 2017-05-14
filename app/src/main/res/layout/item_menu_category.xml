@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/selectable_third_window_color"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingBottom="@dimen/item_spacing"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/half_item_spacing"
     android:paddingEnd="@dimen/item_spacing"
     android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
-    android:paddingTop="@dimen/item_spacing">
+    android:paddingTop="@dimen/half_item_spacing">
 
     <TextView
         android:id="@+id/textName"
         style="@style/Text"
-        android:lines="1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:ellipsize="none"
+        android:lines="1" />
 
     <TextView
-        android:layout_marginStart="@dimen/vertical_text_spacing"
-        android:lines="1"
         android:id="@+id/textCount"
         style="@style/Dim"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:ellipsize="none"
+        android:lines="1" />
 </LinearLayout>
