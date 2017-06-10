@@ -4,13 +4,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import erika.app.coffee.application.ActionType;
+import erika.app.coffee.component.OrderFragment;
 import erika.app.coffee.model.BackStackElement;
 import erika.app.coffee.model.args.PushComponentArgs;
 import erika.app.coffee.model.args.SetAppTitleArgs;
 import erika.app.coffee.model.args.SetClientStatus;
 import erika.app.coffee.model.args.SetRootArgs;
+import erika.app.coffee.model.args.SetCurrentTableArgs;
+import erika.app.coffee.model.args.SetTablePriceArgs;
 import erika.app.coffee.model.args.ShowPopupArgs;
 import erika.app.coffee.state.MainState;
+import erika.app.coffee.utility.Utils;
 import erika.core.redux.Action;
 import erika.core.redux.Reducer;
 import erika.core.redux.Redux;
@@ -38,6 +42,10 @@ public class MainReducer implements Reducer<MainState> {
                 return setRoot(state, (SetRootArgs) action);
             case ActionType.SET_CLIENT_STATUS:
                 return setClientStatus(state, (SetClientStatus) action);
+            case ActionType.SET_TABLE_PRICE:
+                return setTalePrice(state, (SetTablePriceArgs) action);
+            case ActionType.SET_CURRENT_TABLE:
+                return setTable(state, (SetCurrentTableArgs)action);
             default:
                 return state;
         }
@@ -93,4 +101,22 @@ public class MainReducer implements Reducer<MainState> {
             x.clientStatus = action.status;
         });
     }
+
+    private MainState setTalePrice(MainState state, SetTablePriceArgs action) {
+        if (state.backStack.peek().component == OrderFragment.class) {
+            return Redux.copy(state, x -> {
+                if (x.tableId == action.tableId) {
+                    x.subtitle = Utils.stringFrom(action.price);
+                }
+            });
+        }
+        return state;
+    }
+
+    private MainState setTable(MainState state, SetCurrentTableArgs action) {
+        return Redux.copy(state, x -> {
+            x.tableId = action.table.id;
+        });
+    }
+
 }

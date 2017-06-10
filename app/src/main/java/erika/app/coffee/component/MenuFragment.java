@@ -104,7 +104,7 @@ public class MenuFragment extends BaseFragment<MenuState> {
     }
 
     private void addMenuItem(MenuItem item) {
-        dispatch(MenuActions.showNumberDialog(getActivity(), item, getState().tableId));
+        dispatch(MenuActions.showNumberDialog(getActivity(), item, getState().tableId, false));
     }
 
     private static class CategoryBinder extends ViewBinder<MenuCategory> {
@@ -146,10 +146,8 @@ public class MenuFragment extends BaseFragment<MenuState> {
         @Override
         public void bind() {
             MenuItem item = getItem();
-            //int color = getLayoutPosition() % 2 == 0 ? R.color.thirdWindowColor : R.color.fourthWindowColor;
             textName.setText(item.name);
             textDescription.setText(Utils.stringFrom(item.price));
-           // itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), color));
         }
     }
 

@@ -23,7 +23,7 @@ import erika.core.threading.Task;
 public class ServiceInterface {
     private static ServiceInterface instance;
     private final Client client;
-    private static boolean MOCK = true;
+    private static boolean MOCK = false;
 
     public static ServiceInterface shared(Context context) {
         if (instance == null) {

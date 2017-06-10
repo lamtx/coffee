@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="tiny_font_size">9sp</dimen>
-    <dimen name="small_font_size">11sp</dimen>
-    <dimen name="medium_font_size">14sp</dimen>
-    <dimen name="large_font_size">16sp</dimen>
-    <dimen name="number_font_size">22sp</dimen>
+    <dimen name="small_font_size">12sp</dimen>
+    <dimen name="medium_font_size">15sp</dimen>
+    <dimen name="large_font_size">18sp</dimen>
+    <dimen name="number_font_size">24sp</dimen>
 </resources>

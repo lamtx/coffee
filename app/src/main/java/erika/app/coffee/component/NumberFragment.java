@@ -22,6 +22,7 @@ public class NumberFragment extends BaseFragment<NumberState> {
     private TextView buttonZero;
     private View buttonDot;
     private View actionLayout;
+    private TextView textTitle;
 
     @Override
     public NumberState getStateFromStore(AppState appState) {
@@ -34,6 +35,7 @@ public class NumberFragment extends BaseFragment<NumberState> {
         View view = inflater.inflate(R.layout.fragment_number, container, false);
         ViewGroup numberContainer = (ViewGroup) view.findViewById(R.id.numberContainer);
         buttonZero = (TextView) view.findViewById(R.id.buttonZero);
+        textTitle = (TextView) view.findViewById(android.R.id.title);
         buttonDot = view.findViewById(R.id.buttonDot);
         actionLayout = view.findViewById(R.id.actionLayout);
         textValue = ((TextView) view.findViewById(R.id.textValue));
@@ -72,20 +74,22 @@ public class NumberFragment extends BaseFragment<NumberState> {
 
     private void handleNumberButtonClick(char tag) {
         if (getState().mode == InputNumberMode.INTEGER) {
-            dispatch(NumberActions.addValue(getState().value, tag, getState().action));
+            dispatch(NumberActions.addValue(getState().value, getState().decreaseMode, tag, getState().action));
         } else {
-            dispatch(NumberActions.appendChar(getState().value, tag));
+            dispatch(NumberActions.appendChar(getState().value, getState().decreaseMode, tag));
         }
     }
 
     @Override
     public void bindStateToView(NumberState state) {
         super.bindStateToView(state);
+        textTitle.setVisibility(isLandscape() ? View.GONE : View.VISIBLE);
         textValue.setText(state.value);
+        textTitle.setText(state.title);
         if (state.mode == InputNumberMode.DOUBLE) {
             actionLayout.setVisibility(View.VISIBLE);
             buttonZero.setText(R.string.num_0);
-            buttonZero.setTag(R.string.num_0);
+            buttonZero.setTag(getString(R.string.num_0));
             buttonDot.setEnabled(true);
         } else {
             actionLayout.setVisibility(View.GONE);

@@ -33,6 +33,7 @@ public class ImmutableArrayList<E> implements Collection<E> {
         for (int i = 0; i < items.length; i++) {
             items[i] = creator.apply(i);
         }
+        int s = populated == 0 ? 1 : 2;
         return items;
     }
 
@@ -136,11 +137,11 @@ public class ImmutableArrayList<E> implements Collection<E> {
     }
 
     @CheckResult
-    public <T> ImmutableStack<T> append(E component) {
+    public <T> ImmutableArrayList<T> append(E component) {
         Object[] buffer = new Object[items.length + 1];
         System.arraycopy(items, 0, buffer, 0, items.length);
         buffer[buffer.length - 1] = component;
-        return new ImmutableStack<>(buffer);
+        return new ImmutableArrayList<>(buffer);
     }
 
     @CheckResult

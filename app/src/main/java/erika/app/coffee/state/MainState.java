@@ -15,4 +15,5 @@ public class MainState implements Cloneable {
     public String subtitle;
     public Client.Status clientStatus;
     public String clientMessage;
+    public int tableId;
 }

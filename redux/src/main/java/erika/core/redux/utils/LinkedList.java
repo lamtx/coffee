@@ -134,6 +134,7 @@ public class LinkedList<E> implements Collection<E> {
     @Override
     public void clear() {
         head = null;
+        rear = null;
         size = 0;
     }
 

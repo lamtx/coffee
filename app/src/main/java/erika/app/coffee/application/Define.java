@@ -10,5 +10,5 @@ public class Define {
 
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###,###,###,###");
     public static final int PORT = 36524;
-    public static final int CONNECTION_TIMEOUT = (int)(20 * DateUtils.SECOND_IN_MILLIS);
+    public static final int CONNECTION_TIMEOUT = (int)(200 * DateUtils.SECOND_IN_MILLIS);
 }

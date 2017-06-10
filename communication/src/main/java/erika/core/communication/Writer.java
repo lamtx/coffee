@@ -43,25 +43,25 @@ public final class Writer {
         sb.append(value);
         return this;
     }
-//
-//    public Writer write(Writable value) {
-//        write(value != null);
-//        if (value != null) {
-//            value.writeToWriter(this);
-//        }
-//        return this;
-//    }
-//
-//    public Writer write(Writable[] value) {
-//        write(value != null);
-//        if (value != null) {
-//            write(value.length);
-//            for (Writable obj : value) {
-//                obj.writeToWriter(this);
-//            }
-//        }
-//        return this;
-//    }
+
+    public Writer write(Writable value) {
+        write(value != null);
+        if (value != null) {
+            value.writeToWriter(this);
+        }
+        return this;
+    }
+
+    public Writer write(Writable[] value) {
+        write(value != null);
+        if (value != null) {
+            write(value.length);
+            for (Writable obj : value) {
+                obj.writeToWriter(this);
+            }
+        }
+        return this;
+    }
 
     public Writer write(String[] value) {
         write(value != null);

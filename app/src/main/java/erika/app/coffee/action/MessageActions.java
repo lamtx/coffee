@@ -1,8 +1,6 @@
 package erika.app.coffee.action;
 
-import android.os.Handler;
-
-import erika.app.coffee.model.Message;
+import erika.app.coffee.model.LoadState;
 import erika.app.coffee.model.args.AddMessageArgs;
 import erika.app.coffee.model.args.ChangeMessageStatusArgs;
 import erika.app.coffee.model.args.RemoveMessageArgs;
@@ -16,7 +14,7 @@ public class MessageActions {
         return messageId++;
     }
 
-    public static Action addMessage(String message, int messageId, Message.Status status) {
+    public static Action addMessage(String message, int messageId, LoadState status) {
         return new AddMessageArgs(message, messageId, status);
     }
 
@@ -24,10 +22,10 @@ public class MessageActions {
         return new RemoveMessageArgs(messageId);
     }
 
-    public static DispatchAction changeMessageStatus(int messageId, Message.Status status) {
+    public static DispatchAction changeMessageStatus(int messageId, LoadState status) {
         return dispatcher -> {
             switch (status) {
-                case FINISHED:
+                case NONE:
                     dispatcher.dispatchDelayed(removeMessage(messageId), 3000);
                     break;
             }

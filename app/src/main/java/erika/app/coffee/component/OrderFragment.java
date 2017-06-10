@@ -44,6 +44,10 @@ public class OrderFragment extends BaseFragment<OrderState> {
                 return x > leftPanel.getWidth();
             }
         });
+        view.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            int width = right - left;
+            omitSize(width, getState());
+        });
         setHasOptionsMenu(true);
         return view;
     }
@@ -75,11 +79,17 @@ public class OrderFragment extends BaseFragment<OrderState> {
     @Override
     public void bindStateToView(OrderState state) {
         super.bindStateToView(state);
-        int width = (int) (state.leftPanelWidth * getView().getWidth());
-        if (leftPanel.getWidth() != width) {
-            ViewGroup.LayoutParams layoutParams = leftPanel.getLayoutParams();
-            layoutParams.width = Math.max(width, leftPanel.getMinimumWidth());
-            leftPanel.setLayoutParams(layoutParams);
+        omitSize(getView().getWidth(), state);
+    }
+
+    private void omitSize(int width, OrderState state) {
+        if (width > 0) {
+            int w = (int) (state.leftPanelWidth * width);
+            if (leftPanel.getWidth() != w) {
+                ViewGroup.LayoutParams layoutParams = leftPanel.getLayoutParams();
+                layoutParams.width = Math.max(w, leftPanel.getMinimumWidth());
+                leftPanel.setLayoutParams(layoutParams);
+            }
         }
     }
 }

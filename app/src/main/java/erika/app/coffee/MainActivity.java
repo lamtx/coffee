@@ -9,6 +9,8 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,16 +23,20 @@ import erika.app.coffee.model.TransitionStyle;
 import erika.app.coffee.service.Client;
 import erika.app.coffee.state.MainState;
 import erika.app.coffee.utility.LayoutInflaterWrapper;
+import erika.app.coffee.utility.Utils;
 
 public class MainActivity extends BaseActivity<MainState> {
     private final LayoutInflaterWrapper layoutInflater = new LayoutInflaterWrapper(this);
     private Toolbar toolbar;
     private static final Map<Class, Fragment.SavedState> states = new HashMap<>();
+    private TextView textClientStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        textClientStatus = ((TextView) findViewById(R.id.textClientStatus));
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> {
             if (getState().backStack.size() > 1) {
@@ -71,9 +77,11 @@ public class MainActivity extends BaseActivity<MainState> {
     public void bindStateToView(MainState state) {
         super.bindStateToView(state);
         toolbar.setTitle(state.title);
-        toolbar.setSubtitle(state.clientStatus != null && state.clientStatus != Client.Status.CONNECTED ? state.clientMessage : state.subtitle);
-        toolbar.setBackgroundColor(statusToColor(state.clientStatus));
+        toolbar.setSubtitle(state.subtitle);
         toolbar.setNavigationIcon(state.backStack.size() > 1 ? R.drawable.ic_back : R.drawable.ic_navigation_bar_logo);
+        textClientStatus.setVisibility(state.clientStatus == null || state.clientStatus == Client.Status.CONNECTED ? View.GONE : View.VISIBLE);
+        textClientStatus.setText(state.clientMessage);
+        textClientStatus.setBackgroundColor(statusToColor(state.clientStatus));
     }
 
     @ColorInt
@@ -96,11 +104,14 @@ public class MainActivity extends BaseActivity<MainState> {
         super.willReceiveState(state);
         int num = state.backStack.size() - (getState() == null ? 0 : getState().backStack.size());
         TransitionStyle transitionStyle = num == 0 ? TransitionStyle.PUSH : (num > 0 ? TransitionStyle.PUSH : TransitionStyle.POP);
-        bindComponentToId(state.backStack.peek().component, R.id.container, transitionStyle, true);
+        boolean bound = bindComponentToId(state.backStack.peek().component, R.id.container, transitionStyle, true);
         bindComponentToId(state.popupContainer, R.id.popup, state.popupContainer == null ? TransitionStyle.POPUP_DISMISS : TransitionStyle.POPUP_SHOW, false);
+        if (bound) {
+            Utils.hideKeyboard(this);
+        }
     }
 
-    private void bindComponentToId(Class<? extends Fragment> component, @IdRes int id, TransitionStyle transitionStyle, boolean shouldRestoreState) {
+    private boolean bindComponentToId(Class<? extends Fragment> component, @IdRes int id, TransitionStyle transitionStyle, boolean shouldRestoreState) {
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(id);
 
@@ -110,6 +121,7 @@ public class MainActivity extends BaseActivity<MainState> {
                     states.put(fragment.getClass(), fm.saveFragmentInstanceState(fragment));
                 }
                 fm.beginTransaction().remove(fragment).commit();
+                return true;
             }
         } else if (fragment == null || fragment.getClass() != component) {
             if (shouldRestoreState && fragment != null) {
@@ -143,6 +155,8 @@ public class MainActivity extends BaseActivity<MainState> {
                 }
             }
             fragmentTransaction.replace(id, instance, null).commit();
+            return true;
         }
+        return false;
     }
 }

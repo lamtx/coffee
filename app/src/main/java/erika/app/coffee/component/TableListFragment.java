@@ -154,7 +154,7 @@ public class TableListFragment extends BaseListFragment<TableListState, Table> {
         switch (table.status) {
             case BUSY:
                 dispatch(OrderActions.setTable(table, true));
-                dispatch(MainActions.push(OrderFragment.class, ""));
+                dispatch(MainActions.push(OrderFragment.class, table.name, Utils.stringFrom(table.price)));
                 break;
             case AVAILABLE:
                 dispatch(TableListActions.serveTable(getActivity(), table));

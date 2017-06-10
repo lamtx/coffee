@@ -182,6 +182,14 @@ public class Arrays {
         return value;
     }
 
+    public static <T> double sum(Iterable<T> source, ArrayHelper.DoubleCreator<T> creator) {
+        double value = 0;
+        for (T t : source) {
+            value += creator.value(t);
+        }
+        return value;
+    }
+
     @SafeVarargs
     public static <T> List<T> asModifiableList(T... values) {
         if (values == null) {

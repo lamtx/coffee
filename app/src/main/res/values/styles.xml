@@ -20,8 +20,8 @@
     </style>
 
     <style name="Popup">
-        <item name="android:layout_marginTop">40dp</item>
-        <item name="android:layout_marginBottom">40dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:layout_marginLeft">20dp</item>
         <item name="android:layout_marginRight">20dp</item>
         <item name="android:background">@drawable/rounded_rectangle</item>
@@ -57,6 +57,10 @@
         <item name="android:textSize">@dimen/small_font_size</item>
     </style>
 
+    <style name="Text.Light.Small">
+        <item name="android:textSize">@dimen/small_font_size</item>
+    </style>
+
     <style name="Dim.Small">
         <item name="android:textSize">@dimen/small_font_size</item>
     </style>
@@ -77,6 +81,7 @@
 
     <style name="Button.Number">
         <item name="android:background">@drawable/number_button</item>
+        <item name="android:textColor">@color/textColor</item>
         <item name="android:textSize">@dimen/large_font_size</item>
         <item name="android:layout_width">86dp</item>
         <item name="android:layout_height">64dp</item>

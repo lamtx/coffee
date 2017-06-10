@@ -1,15 +1,11 @@
 package erika.app.coffee.model;
 
 public class Message implements Cloneable {
-    public enum Status {
-        PROCESSING, FINISHED, FAILED
-    }
-
     public String message;
-    public Status status;
+    public LoadState status;
     public int id;
 
-    public Message(String message, int messageId, Status status) {
+    public Message(String message, int messageId, LoadState status) {
         this.message = message;
         this.id = messageId;
         this.status = status;

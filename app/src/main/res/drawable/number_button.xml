@@ -6,19 +6,17 @@
             <item android:state_enabled="false">
                 <shape>
                     <stroke
-                        android:width="@dimen/half_item_spacing"
-                        android:color="@android:color/transparent" />
-                    <corners android:radius="2dp" />
+                        android:width="1px"
+                        android:color="@color/disabledTextColor" />
                     <solid android:color="@color/disabledTextColor" />
                 </shape>
             </item>
             <item>
                 <shape>
                     <stroke
-                        android:width="@dimen/half_item_spacing"
-                        android:color="@android:color/transparent" />
-                    <corners android:radius="2dp" />
-                    <solid android:color="?colorControlNormal" />
+                        android:width="1px"
+                        android:color="@color/disabledTextColor" />
+                    <solid android:color="@color/windowColor" />
                 </shape>
             </item>
         </selector>

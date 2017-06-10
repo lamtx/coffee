@@ -11,6 +11,7 @@
     <TextView
         android:id="@+id/textTotal"
         style="@style/Title"
+        android:lines="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -19,6 +20,7 @@
     <TextView
         android:id="@+id/textName"
         style="@style/Text"
+        android:lines="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -35,6 +37,7 @@
         <TextView
             android:id="@+id/textPrice"
             style="@style/Dim"
+            android:lines="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -49,6 +52,7 @@
         <TextView
             android:id="@+id/textQuantity"
             style="@style/Dim"
+            android:lines="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>

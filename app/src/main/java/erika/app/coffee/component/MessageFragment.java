@@ -16,6 +16,7 @@ import erika.app.coffee.presentation.ViewBinder;
 import erika.app.coffee.state.MessageListState;
 
 public class MessageFragment extends BaseListFragment<MessageListState, Message> {
+
     @Override
     public MessageListState getStateFromStore(AppState appState) {
         return appState.messageList;
@@ -24,13 +25,6 @@ public class MessageFragment extends BaseListFragment<MessageListState, Message>
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_message;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        return view;
     }
 
     @Override
@@ -47,12 +41,15 @@ public class MessageFragment extends BaseListFragment<MessageListState, Message>
         private final TextView textMessage;
         private final View loadingIndicator;
         private final View checkedIndicator;
+        private final View failedIndicator;
+
 
         public ItemBinder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.item_message, parent, false));
             textMessage = ((TextView) itemView.findViewById(R.id.textMessage));
             loadingIndicator = itemView.findViewById(R.id.loadingIndicator);
             checkedIndicator = itemView.findViewById(R.id.checkedIndicator);
+            failedIndicator = itemView.findViewById(R.id.failedIndicator);
             itemView.findViewById(R.id.buttonClose).setOnClickListener(v -> {
                 removeMessage(getItem());
             });
@@ -62,8 +59,24 @@ public class MessageFragment extends BaseListFragment<MessageListState, Message>
         public void bind() {
             Message item = getItem();
             textMessage.setText(item.message);
-            loadingIndicator.setVisibility(item.status == Message.Status.PROCESSING ? View.VISIBLE : View.GONE);
-            checkedIndicator.setVisibility(item.status == Message.Status.FINISHED ? View.VISIBLE : View.GONE);
+            switch (item.status) {
+                case NONE:
+                    loadingIndicator.setVisibility(View.GONE);
+                    failedIndicator.setVisibility(View.GONE);
+                    checkedIndicator.setVisibility(View.VISIBLE);
+                    break;
+                case FAILED:
+                    loadingIndicator.setVisibility(View.GONE);
+                    failedIndicator.setVisibility(View.VISIBLE);
+                    checkedIndicator.setVisibility(View.GONE);
+                    break;
+                case LOADING:
+                    loadingIndicator.setVisibility(View.VISIBLE);
+                    failedIndicator.setVisibility(View.GONE);
+                    checkedIndicator.setVisibility(View.GONE);
+                    break;
+
+            }
         }
     }
 }

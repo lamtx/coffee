@@ -17,6 +17,7 @@ import erika.core.redux.DispatchAction;
 public class SignInActions {
     public static DispatchAction signIn(Context context, String userName, String password, String host) {
         return dispatcher -> {
+            dispatcher.dispatch(MainActions.closeKeyboard(context));
             // Validate
             if (TextUtils.isEmpty(userName)) {
                 dispatcher.dispatch(MessageBoxActions.show("Tên người dùng bị thiếu", "Đăng nhập"));

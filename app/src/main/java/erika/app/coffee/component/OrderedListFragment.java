@@ -9,6 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import erika.app.coffee.R;
+import erika.app.coffee.action.MenuActions;
 import erika.app.coffee.action.OrderedListActions;
 import erika.app.coffee.application.AppState;
 import erika.app.coffee.model.LoadState;
@@ -80,11 +81,13 @@ public class OrderedListFragment extends BaseListFragment<OrderedListState, Orde
         popup.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.action_add:
+                    dispatch(MenuActions.showNumberDialog(getActivity(), menuItem.menuItem, getState().tableId, false));
                     break;
                 case R.id.action_remove:
+                    dispatch(MenuActions.showNumberDialog(getActivity(), menuItem.menuItem, getState().tableId, true));
                     break;
                 case R.id.action_clear:
-                    dispatch(OrderedListActions.clear(getActivity(), getState().tableId, menuItem.id, menuItem.menuItem));
+                    dispatch(MenuActions.clear(getActivity(), getState().tableId, menuItem.id, menuItem.menuItem));
                     break;
             }
             return true;

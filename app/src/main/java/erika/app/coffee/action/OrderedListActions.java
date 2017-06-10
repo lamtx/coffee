@@ -14,6 +14,7 @@ import erika.app.coffee.reducer.OrderedListReducer;
 import erika.app.coffee.service.ServiceInterface;
 import erika.app.coffee.service.communication.MenuItem;
 import erika.app.coffee.service.communication.OrderedMenuItem;
+import erika.app.coffee.utility.Utils;
 import erika.core.redux.Action;
 import erika.core.redux.DispatchAction;
 
@@ -25,9 +26,10 @@ public class OrderedListActions {
             ServiceInterface.shared(context).fetchOrderedMenuItems(tableId).then(task -> {
                 dispatcher.dispatch(setIsRefreshing(false));
                 if (task.isCompleted()) {
+                    double total = Utils.calcTotal(task.getResult().menus);
                     dispatcher.dispatch(setLoadState(LoadState.NONE));
                     dispatcher.dispatch(setItemsResult(task.getResult().tableId, task.getResult().menus, task.getResult().tableName));
-                    dispatcher.dispatch(MainActions.setAppTitle(task.getResult().tableName, ""));
+                    dispatcher.dispatch(TableListActions.setTablePrice(tableId, total));
                 } else {
                     dispatcher.dispatch(setLoadState(LoadState.FAILED));
                 }
@@ -51,17 +53,4 @@ public class OrderedListActions {
         return new SetIsRefreshingArgs(OrderedListReducer.class, refreshing);
     }
 
-    public static DispatchAction clear(Context context, int tableId, int id, MenuItem menuItem) {
-        return dispatcher -> {
-            String message = context.getString(R.string.message_clear_ordered_item, menuItem.name);
-            String title = context.getString(R.string.title_clear_ordered_item);
-            dispatcher.dispatch(MessageBoxActions.ask(message, title, () -> {
-                ServiceInterface.shared(context).editOrderedItem(menuItem, tableId, -10000, id).then(task -> {
-                    if (task.isCompleted() && task.getResult().successful) {
-                        dispatcher.dispatch(addItem(tableId, menuItem, -10000, id));
-                    }
-                });
-            }));
-        };
-    }
 }

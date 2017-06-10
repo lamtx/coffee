@@ -15,10 +15,4 @@ public class WritableMessage implements Writable {
         this.sequenceId = sequenceId;
     }
 
-    @Override
-    public String toMessage() {
-        Writer writer = new Writer();
-        writeToWriter(writer);
-        return writer.toMessage();
-    }
 }

@@ -13,6 +13,14 @@
         android:orientation="vertical"
         android:padding="@dimen/item_padding">
 
+        <TextView
+            style="@style/Title"
+            android:lines="1"
+            android:textStyle="bold"
+            android:id="@android:id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -39,6 +47,7 @@
             android:id="@+id/numberContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/number_border"
             android:columnCount="3">
 
             <Button
@@ -103,10 +112,10 @@
         </GridLayout>
 
         <LinearLayout
+            android:id="@+id/actionLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:id="@+id/actionLayout"
             android:layout_marginTop="@dimen/item_padding">
 
             <Button

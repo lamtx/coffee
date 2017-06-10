@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import erika.app.coffee.action.MainActions;
+import erika.app.coffee.action.OrderActions;
 import erika.app.coffee.action.SignInActions;
 import erika.app.coffee.application.AppState;
 import erika.app.coffee.application.AppStore;
@@ -64,6 +65,7 @@ public class App extends ReduxApplication<AppState> {
         dispatch(SignInActions.setHost(host));
         dispatch(SignInActions.setUserName(userName));
         dispatch(SignInActions.setPassword(password));
+        dispatch(OrderActions.setLeftPanelWidth(this, settings.getLeftPanelWidth()));
 
         if (!TextUtils.isEmpty(host) &&
                 !TextUtils.isEmpty(userName) &&

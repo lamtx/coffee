@@ -12,7 +12,7 @@ import erika.app.coffee.model.args.AddOrderedItemArgs;
 import erika.app.coffee.model.args.SetIsRefreshingArgs;
 import erika.app.coffee.model.args.SetLoadStateArgs;
 import erika.app.coffee.model.args.SetOrderedMenuListArgs;
-import erika.app.coffee.model.args.SetTableForOrderComponentArgs;
+import erika.app.coffee.model.args.SetCurrentTableArgs;
 import erika.app.coffee.service.communication.OrderedMenuItem;
 import erika.app.coffee.state.OrderedListState;
 import erika.core.Arrays;
@@ -29,8 +29,8 @@ public class OrderedListReducer implements Reducer<OrderedListState> {
             state = new OrderedListState();
         }
         switch (action.getType()) {
-            case ActionType.SET_TABLE_FOR_ORDER_COMPONENT:
-                return setTable(state, (SetTableForOrderComponentArgs) action);
+            case ActionType.SET_CURRENT_TABLE:
+                return setTable(state, (SetCurrentTableArgs) action);
             case ActionType.SET_ORDERED_MENU_LIST:
                 return setOrderedMenuList(state, (SetOrderedMenuListArgs) action);
             case ActionType.SET_IS_REFRESHING:
@@ -44,7 +44,7 @@ public class OrderedListReducer implements Reducer<OrderedListState> {
         }
     }
 
-    private OrderedListState setTable(OrderedListState state, SetTableForOrderComponentArgs action) {
+    private OrderedListState setTable(OrderedListState state, SetCurrentTableArgs action) {
         return Redux.copy(state, x -> {
             x.tableId = action.table.id;
         });

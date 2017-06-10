@@ -9,7 +9,7 @@ public class Table implements Cloneable {
     public final int id;
     public final String name;
     public TableStatus status;
-    public final long price;
+    public long price;
 
     public Table(int id, String name, TableStatus status, long price) {
         this.id = id;

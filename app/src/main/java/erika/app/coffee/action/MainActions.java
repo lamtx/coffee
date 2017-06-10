@@ -1,5 +1,6 @@
 package erika.app.coffee.action;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 
@@ -14,12 +15,17 @@ import erika.app.coffee.model.args.SetRootArgs;
 import erika.app.coffee.service.Client;
 import erika.app.coffee.service.ServiceInterface;
 import erika.app.coffee.service.Settings;
+import erika.app.coffee.utility.Utils;
 import erika.core.redux.Action;
 import erika.core.redux.DispatchAction;
 
 public class MainActions {
     public static Action push(Class<? extends Fragment> component, String title) {
-        return new PushComponentArgs(new BackStackElement(component, title));
+        return push(component, title, null);
+    }
+
+    public static Action push(Class<? extends Fragment> component, String title, String subTitle) {
+        return new PushComponentArgs(new BackStackElement(component, title, subTitle));
     }
 
     public static Action pop() {
@@ -62,4 +68,16 @@ public class MainActions {
     public static Action setClientStatus(Client.Status status, String message) {
         return new SetClientStatus(status, message);
     }
+
+    public static DispatchAction closeKeyboard(Context context) {
+        return dispatcher -> {
+            if (context instanceof Activity) {
+                Activity activity = (Activity) context;
+                Utils.hideKeyboard(activity);
+            } else {
+                throw new UnsupportedOperationException("context must be a activity");
+            }
+        };
+    }
+
 }

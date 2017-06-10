@@ -6,6 +6,9 @@
     <EditText
         android:id="@+id/textSearch"
         style="@style/EditText"
+        android:lines="1"
+        android:singleLine="true"
+        android:imeOptions="actionNone"
         android:layout_width="match_parent"
         android:layout_height="?listPreferredItemHeight"
         android:drawableStart="@drawable/ic_search"

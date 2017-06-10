@@ -1,6 +1,7 @@
 package erika.app.coffee.service;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -14,20 +15,20 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-import erika.app.coffee.application.Define;
 import erika.app.coffee.model.ClientInfo;
 import erika.app.coffee.model.ResponseHandler;
 import erika.app.coffee.service.communication.request.Request;
 import erika.app.coffee.service.communication.response.Response;
 import erika.core.communication.MissingFieldException;
 import erika.core.communication.Reader;
+import erika.core.threading.ContinuationOptions;
 import erika.core.threading.Task;
 import erika.core.threading.TaskCompletionSource;
 
 public class Client {
-
     public enum ConnectResult {
         CREDENTIALS_MISSING,
+        HOST_NOT_FOUND,
         CANNOT_CONNECT,
         CONNECTION_TIMEOUT,
         INVALID_AUTHENTICATION,
@@ -106,6 +107,7 @@ public class Client {
     private final Handler handler = new Handler();
     private int privilegeMask;
     private ClientInfo credentials;
+    private Handler writerHandler;
 
     public Client(ResponseHandler handler) {
         this.responseHandler = handler;
@@ -142,9 +144,9 @@ public class Client {
         try {
             socket = new Socket();
             InetSocketAddress sockAddress = new InetSocketAddress(credentials.host, credentials.port);
-            socket.connect(sockAddress, Define.CONNECTION_TIMEOUT);
+            socket.connect(sockAddress, 10_000);
         } catch (SocketTimeoutException ignored) {
-            return ConnectResult.CONNECTION_TIMEOUT;
+            return ConnectResult.HOST_NOT_FOUND;
         } catch (Exception e) {
             return ConnectResult.CANNOT_CONNECT;
         }
@@ -201,6 +203,10 @@ public class Client {
         reader = null;
         writer = null;
         socket = null;
+        if (writerHandler != null) {
+            writerHandler.getLooper().quit();
+            writerHandler = null;
+        }
     }
 
     private void clearPendingRequests() {
@@ -211,6 +217,7 @@ public class Client {
     }
 
     private void listen() {
+        prepareWriterThread();
         Response response;
         String message;
         while (true) {
@@ -236,19 +243,34 @@ public class Client {
         disconnect();
     }
 
-    private boolean sendRawRequest(Request request) {
-        if (writer != null) {
-            try {
-                writer.write(request.toMessage());
-                writer.newLine();
-                writer.flush();
-            } catch (IOException e) {
-                disconnect();
-                return false;
-            }
-            return true;
+    private void prepareWriterThread() {
+        new Thread(() -> {
+            Looper.prepare();
+            writerHandler = new Handler();
+            Looper.loop();
+        }).start();
+    }
+
+
+    private Task<Boolean> sendRawRequest(Request request) {
+        TaskCompletionSource<Boolean> source = new TaskCompletionSource<>();
+        if (writer == null || writerHandler == null) {
+            source.setResult(false);
+        } else {
+            writerHandler.post(() -> {
+                try {
+                    writer.write(request.toMessage());
+                    writer.newLine();
+                    writer.flush();
+                } catch (IOException e) {
+                    disconnect();
+                    source.setResult(false);
+                    return;
+                }
+                source.setResult(true);
+            });
         }
-        return false;
+        return source.getTask();
     }
 
     private void performResponse(final Response response) {
@@ -274,26 +296,27 @@ public class Client {
     private <T extends Response> void trySendRequest(Request request, @Nullable CheckedTaskCompletionSource<T> taskSource) {
         int sequenceId = taskSource == null ? 0 : ++random;
         request.setSequenceId(sequenceId);
-        if (!sendRawRequest(request)) {
-            if (credentials != null) {
-                reconnect(request, taskSource);
-            } else {
-                if (taskSource != null) {
-                    taskSource.setException(new UnableToSendRequestException());
+        sendRawRequest(request).then(task -> {
+            if (!task.getResult()) {
+                if (credentials != null) {
+                    reconnect(request, taskSource);
+                } else {
+                    if (taskSource != null) {
+                        taskSource.setException(new UnableToSendRequestException());
+                    }
                 }
+            } else if (taskSource != null) {
+                pendingActions.put(sequenceId, taskSource);
             }
-            return;
-        }
-        if (taskSource != null) {
-            pendingActions.put(sequenceId, taskSource);
-        }
+        }, ContinuationOptions.EXECUTE_SYNCHRONOUSLY);
+
     }
 
     private <T extends Response> void reconnect(Request request, @Nullable CheckedTaskCompletionSource<T> taskSource) {
         responseHandler.statusChanged(Status.DISCONNECTED, Status.CONNECTING);
         connect().then(task -> {
             if (task.getResult() == ConnectResult.OK) {
-                responseHandler.statusChanged(Status.CONNECTING, Status.CONNECTING);
+                responseHandler.statusChanged(Status.CONNECTED, Status.CONNECTED);
                 trySendRequest(request, taskSource);
             } else {
                 if (taskSource != null) {

@@ -1,62 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark"
+    android:clickable="true"
+    android:orientation="horizontal">
 
     <FrameLayout
-        android:id="@+id/endLayout"
-        android:layout_width="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:background="@color/flatui_color_peter_river"
-        android:layout_marginStart="1dp"
-        android:layout_height="wrap_content">
+        android:id="@+id/indicatorLayout"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="@dimen/item_padding">
 
-        <ImageButton
-            android:tint="@color/lightTextColor"
-            android:id="@+id/buttonClose"
+        <ImageView
+            android:id="@+id/checkedIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?selectableItemBackground"
-            android:padding="@dimen/item_padding"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_check_circle" />
+
+        <ProgressBar
+            android:id="@+id/loadingIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminate="true" />
+
+        <ImageView
+            android:id="@+id/failedIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_warn" />
+
     </FrameLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textMessage"
+        style="@style/Dim.Light"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/item_spacing"
-        android:layout_toStartOf="@id/endLayout"
-        android:background="@color/flatui_color_peter_river">
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/item_padding"
+        android:layout_weight="1"
+        android:lines="1" />
 
-        <FrameLayout
-            android:id="@+id/indicatorLayout"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="@dimen/item_padding">
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
+        android:background="@color/lightDividerColor" />
 
-            <ImageView
-                android:id="@+id/checkedIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_check_circle" />
+    <ImageButton
+        android:id="@+id/buttonClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:padding="@dimen/item_padding"
+        android:src="@drawable/ic_close"
+        android:tint="@color/lightTextColor" />
 
-            <ProgressBar
-                android:id="@+id/loadingIndicator"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:indeterminate="true" />
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/textMessage"
-            style="@style/Dim.Light"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/item_padding"
-            android:layout_toEndOf="@id/indicatorLayout"
-            android:lines="1" />
-    </RelativeLayout>
-</RelativeLayout>
+</LinearLayout>

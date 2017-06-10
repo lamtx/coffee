@@ -10,7 +10,8 @@ import erika.app.coffee.model.TableStatus;
 import erika.app.coffee.model.args.SetIsRefreshingArgs;
 import erika.app.coffee.model.args.SetLoadStateArgs;
 import erika.app.coffee.model.args.SetTableListResultArgs;
-import erika.app.coffee.model.args.SetTableStatus;
+import erika.app.coffee.model.args.SetTablePriceArgs;
+import erika.app.coffee.model.args.SetTableStatusArgs;
 import erika.app.coffee.reducer.TableListReducer;
 import erika.app.coffee.service.ServiceInterface;
 import erika.app.coffee.service.communication.Table;
@@ -74,6 +75,10 @@ public class TableListActions {
     }
 
     public static Action setTableStatus(int tableId, TableStatus status) {
-        return new SetTableStatus(tableId, status);
+        return new SetTableStatusArgs(tableId, status);
+    }
+
+    public static Action setTablePrice(int tableId, double price) {
+        return new SetTablePriceArgs(tableId, price);
     }
 }

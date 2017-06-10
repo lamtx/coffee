@@ -8,8 +8,12 @@ public class ClientInfo {
     public String userName;
     public String password;
 
-    public ClientInfo(String userName, String password, String host) {
-
+    public ClientInfo(String userName, String password, String host) throws IllegalArgumentException {
+        this.userName = userName;
+        this.password = password;
+        HostPort hostPort = parseHost(host);
+        this.host = hostPort.host;
+        this.port = hostPort.port;
     }
 
     public ClientInfo(String userName, String password, String host, int port) {

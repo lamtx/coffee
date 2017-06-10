@@ -6,10 +6,12 @@ import android.support.annotation.Nullable;
 import erika.app.coffee.action.TableListActions;
 import erika.app.coffee.application.ActionType;
 import erika.app.coffee.model.LoadState;
+import erika.app.coffee.model.TableStatus;
 import erika.app.coffee.model.args.SetIsRefreshingArgs;
 import erika.app.coffee.model.args.SetLoadStateArgs;
 import erika.app.coffee.model.args.SetTableListResultArgs;
-import erika.app.coffee.model.args.SetTableStatus;
+import erika.app.coffee.model.args.SetTablePriceArgs;
+import erika.app.coffee.model.args.SetTableStatusArgs;
 import erika.app.coffee.state.TableListState;
 import erika.core.redux.Action;
 import erika.core.redux.Reducer;
@@ -30,7 +32,9 @@ public class TableListReducer implements Reducer<TableListState> {
             case ActionType.SET_LOAD_STATE:
                 return setLoadState(state, (SetLoadStateArgs) action);
             case ActionType.SET_TABLE_STATUS:
-                return setTableStatus(state, (SetTableStatus) action);
+                return setTableStatus(state, (SetTableStatusArgs) action);
+            case ActionType.SET_TABLE_PRICE:
+                return setTablePrice(state, (SetTablePriceArgs) action);
             default:
                 return state;
         }
@@ -63,15 +67,29 @@ public class TableListReducer implements Reducer<TableListState> {
     }
 
 
-    private TableListState setTableStatus(TableListState state, SetTableStatus action) {
+    private TableListState setTableStatus(TableListState state, SetTableStatusArgs action) {
         return Redux.copy(state, x-> {
             x.items = Redux.map(x.items, item -> {
                if (item.id == action.tableId) {
                    return Redux.copy(item, i -> {
                        i.status = action.status;
+                       i.price = action.status == TableStatus.AVAILABLE ? 0 : i.price;
                    });
                }
                return item;
+            });
+        });
+    }
+
+    private TableListState setTablePrice(TableListState state, SetTablePriceArgs action) {
+        return Redux.copy(state, x-> {
+            x.items = Redux.map(x.items, item -> {
+                if (item.id == action.tableId) {
+                    return Redux.copy(item, i -> {
+                        i.price = i.status == TableStatus.AVAILABLE ? 0 : (long)action.price;
+                    });
+                }
+                return item;
             });
         });
     }

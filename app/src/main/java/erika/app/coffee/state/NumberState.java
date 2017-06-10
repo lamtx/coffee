@@ -7,7 +7,9 @@ public class NumberState implements Cloneable {
     public interface Action {
         void apply(double value);
     }
+    public String title;
     public InputNumberMode mode = InputNumberMode.INTEGER;
     public String value = "0";
     public Action action;
+    public boolean decreaseMode = false;
 }

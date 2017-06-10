@@ -67,8 +67,11 @@ public class Reader {
 
     @NonNull
     public String readString() throws MissingFieldException {
-        String result = StringDecoder.decode(readNext());
-        return result == null ? "" : result;
+        try {
+            return StringDecoder.decode(readNext());
+        } catch (MissingFieldException ignored) {
+            return "";
+        }
     }
 
     @Nullable

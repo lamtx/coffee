@@ -28,9 +28,10 @@ public class ActionType {
     // Table List
     public static final String SET_TABLE_LIST_RESULT = "SET_TABLE_LIST_RESULT";
     public static final String SET_TABLE_STATUS = "SET_TABLE_STATUS";
+    public static final String SET_TABLE_PRICE = "SET_TABLE_PRICE";
 
     // Order
-    public static final String SET_TABLE_FOR_ORDER_COMPONENT = "SET_TABLE_FOR_ORDER_COMPONENT";
+    public static final String SET_CURRENT_TABLE = "SET_CURRENT_TABLE";
     public static final String SET_LEFT_PANEL_WIDTH = "SET_LEFT_PANEL_WIDTH";
 
     // Menu
@@ -44,6 +45,7 @@ public class ActionType {
     // Number
     public static final String SET_NUMBER_VALUE = "SET_NUMBER_VALUE";
     public static final String SET_NUMBER_ACTION = "SET_NUMBER_ACTION";
+    public static final String SET_NUMBER_STATE = "SET_NUMBER_STATE";
 
     // Message
     public static final String ADD_MESSAGE = "ADD_MESSAGE";

@@ -2,6 +2,7 @@ package erika.app.coffee.component;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,8 +66,14 @@ public class SignInFragment extends BaseFragment<SignInState> {
     @Override
     public void bindStateToView(SignInState state) {
         super.bindStateToView(state);
-        textUserName.setText(state.userName);
-        textPassword.setText(state.password);
-        textHost.setText(state.host);
+        if (!TextUtils.equals(textUserName.getText(), state.userName)) {
+            textUserName.setText(state.userName);
+        }
+        if (!TextUtils.equals(textPassword.getText(), state.password)) {
+            textPassword.setText(state.password);
+        }
+        if (!TextUtils.equals(textHost.getText(), state.host)) {
+            textHost.setText(state.host);
+        }
     }
 }
