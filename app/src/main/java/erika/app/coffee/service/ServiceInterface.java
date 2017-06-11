@@ -99,7 +99,7 @@ public class ServiceInterface {
         if (MOCK) {
             return Task.completedTask(new SuccessResponse(true, "Thanh toán thành công"));
         }
-        ActionTableRequest request = new ActionTableRequest(shouldPrint ? TableAction.CHECK_OUT : TableAction.CHECK_OUT_AND_PRINT, tableId);
+        ActionTableRequest request = new ActionTableRequest(shouldPrint ? TableAction.CHECK_OUT_AND_PRINT : TableAction.CHECK_OUT, tableId);
         return client.sendRequest(request, SuccessResponse.class);
     }
 
