@@ -44,9 +44,9 @@ public class MenuFragment extends BaseFragment<MenuState> {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.expandable_list, container, false);
-        listView = ((ExpandableListView) view.findViewById(android.R.id.list));
-        emptyText = ((TextView) view.findViewById(android.R.id.empty));
-        refresher = ((SwipeRefreshLayout) view.findViewById(R.id.refresher));
+        listView = view.findViewById(android.R.id.list);
+        emptyText = view.findViewById(android.R.id.empty);
+        refresher = view.findViewById(R.id.refresher);
         refresher.setOnRefreshListener(this::refresh);
         adapter = new MenuAdapter(null,
                 (layoutInflater, parent, groupPosition) -> new CategoryBinder(layoutInflater, parent),
@@ -133,8 +133,8 @@ public class MenuFragment extends BaseFragment<MenuState> {
 
         ItemBinder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.item_menu_item, parent, false));
-            textName = (TextView) itemView.findViewById(R.id.textName);
-            textDescription = (TextView) itemView.findViewById(R.id.textDescription);
+            textName = itemView.findViewById(R.id.textName);
+            textDescription = itemView.findViewById(R.id.textDescription);
             itemView.findViewById(R.id.buttonAdd).setOnClickListener(v -> {
                 addOneItem(getItem());
             });
